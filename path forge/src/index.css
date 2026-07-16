@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+/* ── InternIQ Design System Tokens ── */
+@theme {
+  --color-primary: #0A66C2;
+  --color-primary-dark: #004182;
+  --color-secondary: #1B1F23;
+  --color-accent: #0A66C2;
+}
+
+/* ── Class-based dark mode (matches InternIQ) ── */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ── Global defaults ── */
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Scrollbar styling for dark mode ── */
+.dark {
+  color-scheme: dark;
+}
+
+/* ── Smooth scroll ── */
+html {
+  scroll-behavior: smooth;
+}
