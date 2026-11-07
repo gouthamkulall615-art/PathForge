@@ -1,48 +1,46 @@
 import { ArrowRight } from 'lucide-react'
-
-const PHASE_COUNT_LABEL = (count) => `${count} phase${count !== 1 ? 's' : ''}`
+import FieldIcon from './FieldIcon'
 
 export default function FieldCard({ field, onClick }) {
   const phaseCount = field.phases?.length || 0
+  const topicCount = field.phases?.reduce((sum, p) => sum + (p.topics?.length || 0), 0) || 0
 
   return (
     <button
       onClick={() => onClick?.(field)}
-      className="group w-full text-left bg-white dark:bg-gray-900 rounded-xl
-        border border-gray-200 dark:border-gray-800
-        overflow-hidden transition-all duration-200
-        hover:shadow-md hover:border-[#0A66C2]/40 dark:hover:border-[#0A66C2]/40
-        hover:-translate-y-0.5"
+      className="group w-full text-left bg-white dark:bg-[#12151e] rounded-xl border border-black/[0.08] dark:border-white/[0.08] p-5 hover:border-black/20 dark:hover:border-white/20 transition-colors duration-150 flex flex-col justify-between"
     >
-      <div className="p-5 sm:p-6">
-        {/* Icon + badge row */}
-        <div className="flex items-start justify-between mb-4">
-          <div className="inline-flex items-center justify-center w-11 h-11 rounded-lg
-            bg-[#0A66C2]/10 dark:bg-[#0A66C2]/15 text-xl">
-            {field.icon}
+      <div>
+        {/* Top: Icon + phase meta */}
+        <div className="flex items-start justify-between gap-3 mb-3.5">
+          <div className="w-9 h-9 rounded-lg bg-[#0A66C2]/10 dark:bg-[#0A66C2]/15 flex items-center justify-center text-[#0A66C2]">
+            <FieldIcon fieldId={field.id} className="h-4.5 w-4.5" />
           </div>
-          <span className="inline-flex items-center px-2 py-0.5 rounded-full
-            text-[10px] font-semibold uppercase tracking-wider
-            bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400">
-            {PHASE_COUNT_LABEL(phaseCount)}
+          <span className="text-xs font-mono text-[#6b7487] dark:text-[#7a8296] tabular-nums">
+            {phaseCount} {phaseCount === 1 ? 'phase' : 'phases'}
           </span>
         </div>
 
         {/* Title */}
-        <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-1">
+        <h3 className="text-base font-medium text-[#111827] dark:text-[#eef0f5] mb-1.5">
           {field.name}
         </h3>
 
         {/* Description */}
-        <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed mb-4">
+        <p className="text-xs text-[#4b5565] dark:text-[#a3a9b8] leading-relaxed line-clamp-2 mb-4">
           {field.desc}
         </p>
+      </div>
 
-        {/* CTA row */}
-        <div className="flex items-center gap-1.5 text-sm font-semibold text-[#0A66C2]">
-          View Roadmap
-          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-        </div>
+      {/* Footer link row */}
+      <div className="pt-3 border-t border-black/[0.06] dark:border-white/[0.06] flex items-center justify-between text-xs">
+        <span className="font-mono text-[#6b7487] dark:text-[#7a8296] tabular-nums">
+          {topicCount} topics
+        </span>
+        <span className="inline-flex items-center gap-1 font-medium text-[#0A66C2]">
+          View roadmap
+          <ArrowRight className="h-3 w-3" strokeWidth={1.75} />
+        </span>
       </div>
     </button>
   )

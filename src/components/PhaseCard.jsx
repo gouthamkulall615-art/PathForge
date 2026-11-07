@@ -3,19 +3,16 @@ import { ChevronDown, ExternalLink, PlayCircle, BookOpen } from 'lucide-react'
 
 const LEVEL_STYLES = {
   beginner: {
-    bg: 'bg-emerald-50 dark:bg-emerald-900/20',
-    text: 'text-emerald-700 dark:text-emerald-400',
-    border: 'border-emerald-200 dark:border-emerald-800/50',
+    label: 'Beginner',
+    badge: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
   },
   intermediate: {
-    bg: 'bg-amber-50 dark:bg-amber-900/20',
-    text: 'text-amber-700 dark:text-amber-400',
-    border: 'border-amber-200 dark:border-amber-800/50',
+    label: 'Intermediate',
+    badge: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20',
   },
   advanced: {
-    bg: 'bg-red-50 dark:bg-red-900/20',
-    text: 'text-red-700 dark:text-red-400',
-    border: 'border-red-200 dark:border-red-800/50',
+    label: 'Advanced',
+    badge: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20',
   },
 }
 
@@ -25,70 +22,72 @@ const RESOURCE_ICON = {
 }
 
 export default function PhaseCard({ phase, index }) {
-  const [expanded, setExpanded] = useState(false)
+  const [expanded, setExpanded] = useState(index === 0)
   const level = LEVEL_STYLES[phase.level] || LEVEL_STYLES.beginner
+  const formattedIndex = String(index + 1).padStart(2, '0')
 
   return (
-    <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800
-      rounded-xl shadow-sm overflow-hidden transition-all duration-200">
-
-      {/* Phase header — clickable */}
+    <div className="bg-white dark:bg-[#12151e] border border-black/[0.08] dark:border-white/[0.08] rounded-xl overflow-hidden transition-colors duration-150">
+      {/* Clickable Header */}
       <button
         onClick={() => setExpanded(!expanded)}
-        className="w-full flex items-center gap-4 p-5 sm:p-6 text-left
-          hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
+        className="w-full flex items-center gap-4 p-4 sm:p-5 text-left hover:bg-black/[0.02] dark:hover:bg-white/[0.02] transition-colors"
+        aria-expanded={expanded}
       >
-        {/* Phase number circle */}
-        <div className="flex-shrink-0 inline-flex items-center justify-center w-10 h-10 rounded-full
-          bg-[#0A66C2]/10 dark:bg-[#0A66C2]/15 text-sm font-bold text-[#0A66C2]">
-          {index + 1}
+        {/* Milestone Number */}
+        <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-black/[0.04] dark:bg-white/[0.06] flex items-center justify-center font-mono text-xs font-medium text-[#111827] dark:text-[#eef0f5] tabular-nums">
+          {formattedIndex}
         </div>
 
-        {/* Title + meta */}
+        {/* Phase title & meta */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap mb-1">
-            <h3 className="text-base font-semibold text-gray-900 dark:text-white">
+            <h3 className="text-sm sm:text-base font-medium text-[#111827] dark:text-[#eef0f5] truncate">
               {phase.name}
             </h3>
-            <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px]
-              font-semibold uppercase tracking-wider border
-              ${level.bg} ${level.text} ${level.border}`}>
-              {phase.level}
+            <span className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-mono border ${level.badge}`}>
+              {level.label}
             </span>
           </div>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            {phase.duration}
+          <p className="text-xs font-mono text-[#6b7487] dark:text-[#7a8296] tabular-nums">
+            {phase.duration} · {phase.topics?.length || 0} milestones
           </p>
         </div>
 
-        {/* Chevron */}
-        <ChevronDown className={`h-5 w-5 flex-shrink-0 text-gray-400 dark:text-gray-500
-          transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`} />
+        {/* Chevron Indicator */}
+        <ChevronDown
+          className={`h-4 w-4 text-[#6b7487] dark:text-[#7a8296] transition-transform duration-150 ${
+            expanded ? 'rotate-180' : ''
+          }`}
+          strokeWidth={1.5}
+        />
       </button>
 
-      {/* Expanded content */}
+      {/* Expanded Phase Content */}
       {expanded && (
-        <div className="border-t border-gray-200 dark:border-gray-800">
-          {/* Description */}
-          <div className="px-5 sm:px-6 pt-4 pb-2">
-            <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+        <div className="border-t border-black/[0.06] dark:border-white/[0.06] px-4 sm:px-5 py-4 space-y-5">
+          {/* Phase summary */}
+          {phase.desc && (
+            <p className="text-xs sm:text-sm text-[#4b5565] dark:text-[#a3a9b8] leading-relaxed">
               {phase.desc}
             </p>
-          </div>
+          )}
 
-          {/* Topics */}
-          <div className="px-5 sm:px-6 py-4">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3">
-              Topics to Cover
+          {/* Topics to cover */}
+          <div>
+            <h4 className="text-xs font-medium text-[#111827] dark:text-[#eef0f5] mb-2.5">
+              Topics to cover
             </h4>
-            <div className="space-y-3">
+            <div className="space-y-2">
               {phase.topics?.map((topic, i) => (
-                <div key={i}
-                  className="bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3">
-                  <p className="text-sm font-medium text-gray-900 dark:text-white mb-0.5">
+                <div
+                  key={i}
+                  className="p-3 rounded-lg bg-black/[0.02] dark:bg-white/[0.03] border border-black/[0.04] dark:border-white/[0.04]"
+                >
+                  <p className="text-xs sm:text-sm font-medium text-[#111827] dark:text-[#eef0f5] mb-0.5">
                     {topic.name}
                   </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
+                  <p className="text-xs text-[#6b7487] dark:text-[#7a8296] leading-relaxed">
                     {topic.detail}
                   </p>
                 </div>
@@ -96,11 +95,11 @@ export default function PhaseCard({ phase, index }) {
             </div>
           </div>
 
-          {/* Resources */}
+          {/* Curated Resources */}
           {phase.resources?.length > 0 && (
-            <div className="px-5 sm:px-6 pb-5 sm:pb-6">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3">
-                Curated Resources
+            <div>
+              <h4 className="text-xs font-medium text-[#111827] dark:text-[#eef0f5] mb-2.5">
+                Curated resources
               </h4>
               <div className="space-y-2">
                 {phase.resources.map((res, i) => {
@@ -111,21 +110,15 @@ export default function PhaseCard({ phase, index }) {
                       href={res.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group flex items-center gap-3 p-3
-                        bg-gray-50 dark:bg-gray-800/50 rounded-lg
-                        hover:bg-[#0A66C2]/5 dark:hover:bg-[#0A66C2]/10
-                        transition-colors"
+                      className="group flex items-center justify-between gap-3 p-2.5 rounded-lg bg-black/[0.02] dark:bg-white/[0.03] hover:bg-black/[0.05] dark:hover:bg-white/[0.06] border border-black/[0.04] dark:border-white/[0.04] transition-colors"
                     >
-                      <div className="flex-shrink-0 inline-flex items-center justify-center
-                        w-8 h-8 rounded-lg bg-[#0A66C2]/10 dark:bg-[#0A66C2]/15">
-                        <Icon className="h-4 w-4 text-[#0A66C2]" />
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <Icon className="h-4 w-4 text-[#0A66C2] flex-shrink-0" strokeWidth={1.75} />
+                        <span className="text-xs font-medium text-[#111827] dark:text-[#eef0f5] truncate">
+                          {res.label}
+                        </span>
                       </div>
-                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300
-                        group-hover:text-[#0A66C2] transition-colors truncate">
-                        {res.label}
-                      </span>
-                      <ExternalLink className="h-3.5 w-3.5 flex-shrink-0 text-gray-400
-                        dark:text-gray-500 ml-auto" />
+                      <ExternalLink className="h-3.5 w-3.5 text-[#6b7487] dark:text-[#7a8296] flex-shrink-0" strokeWidth={1.5} />
                     </a>
                   )
                 })}

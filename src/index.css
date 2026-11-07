@@ -1,29 +1,25 @@
 @import "tailwindcss";
 
-/* ── InternIQ Design System Tokens ── */
 @theme {
-  --color-primary: #0A66C2;
-  --color-primary-dark: #004182;
-  --color-secondary: #1B1F23;
   --color-accent: #0A66C2;
+  --color-accent-dark: #004182;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
-/* ── Class-based dark mode (matches InternIQ) ── */
+/* Class-based dark mode */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* ── Global defaults ── */
+/* Base typography and rendering */
 body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ── Scrollbar styling for dark mode ── */
 .dark {
   color-scheme: dark;
 }
 
-/* ── Smooth scroll ── */
 html {
   scroll-behavior: smooth;
 }

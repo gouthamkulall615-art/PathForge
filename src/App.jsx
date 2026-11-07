@@ -23,6 +23,7 @@ function AppContent() {
     } else if (section === 'about') {
       setActiveSection('about')
       setSelectedField(null)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     }
   }
 
@@ -32,10 +33,10 @@ function AppContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors">
+    <div className="min-h-screen bg-[#f6f8fb] dark:bg-[#0b0d13] text-[#111827] dark:text-[#eef0f5] transition-colors duration-150">
       <Navbar activeSection={activeSection} onNavigate={handleNavigate} />
 
-      <main className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10 max-w-7xl mx-auto">
+      <main className="px-4 sm:px-6 max-w-6xl mx-auto py-6 sm:py-8">
         {selectedField ? (
           <RoadmapView
             field={selectedField}
@@ -45,27 +46,33 @@ function AppContent() {
             }}
           />
         ) : activeSection === 'about' ? (
-          <AboutSection />
+          <AboutSection onBrowse={() => handleNavigate('roadmaps')} />
         ) : (
           <>
-            <HeroSection onExplore={() => {
-              gridRef.current?.scrollIntoView({ behavior: 'smooth' })
-            }} />
+            <HeroSection
+              onExplore={() => {
+                gridRef.current?.scrollIntoView({ behavior: 'smooth' })
+              }}
+              onLearnMore={() => handleNavigate('about')}
+            />
 
-            {/* Field grid */}
-            <div ref={gridRef} className="scroll-mt-24">
-              <div className="flex items-center justify-between mb-6">
+            {/* Field Catalog Grid */}
+            <div ref={gridRef} className="scroll-mt-20">
+              <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 mb-5">
                 <div>
-                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                    Choose Your Path
+                  <h2 className="text-xl font-semibold text-[#111827] dark:text-[#eef0f5] tracking-tight">
+                    Career tracks
                   </h2>
-                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    {FIELDS.length} expert-curated roadmaps across tech disciplines
+                  <p className="text-xs text-[#4b5565] dark:text-[#a3a9b8] mt-0.5">
+                    Select a path to inspect phased milestones and free study materials
                   </p>
+                </div>
+                <div className="text-xs font-mono text-[#6b7487] dark:text-[#7a8296] tabular-nums">
+                  {FIELDS.length} tracks available
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {FIELDS.map((field) => (
                   <FieldCard
                     key={field.id}
@@ -80,73 +87,73 @@ function AppContent() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 transition-colors">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-gray-500 dark:text-gray-400">
-              © {new Date().getFullYear()} PathForge. Expert-curated learning paths for tech careers.
-            </p>
-            <p className="text-xs text-gray-400 dark:text-gray-500">
-              All roadmaps are community-curated and regularly updated.
-            </p>
-          </div>
+      <footer className="mt-16 border-t border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#0d0f14] transition-colors duration-150">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#6b7487] dark:text-[#7a8296]">
+          <p>
+            © {new Date().getFullYear()} PathForge. Structured engineering roadmaps.
+          </p>
+          <p className="font-mono">
+            All linked resources are freely accessible.
+          </p>
         </div>
       </footer>
     </div>
   )
 }
 
-function AboutSection() {
+function AboutSection({ onBrowse }) {
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="text-center mb-8 sm:mb-10">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white tracking-tight mb-2">
+    <div className="max-w-3xl mx-auto py-4">
+      <div className="mb-8 pb-6 border-b border-black/[0.08] dark:border-white/[0.08]">
+        <h1 className="text-2xl sm:text-3xl font-semibold text-[#111827] dark:text-[#eef0f5] tracking-tight mb-2">
           About PathForge
         </h1>
-        <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
-          Structured, expert-curated career roadmaps for aspiring tech professionals.
+        <p className="text-sm text-[#4b5565] dark:text-[#a3a9b8] leading-relaxed">
+          Sequential, vetted study paths designed to navigate software engineering disciplines without commercial paywalls.
         </p>
       </div>
 
-      <div className="space-y-6">
-        <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 sm:p-8">
-          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-3">
-            What is PathForge?
+      <div className="space-y-4">
+        <div className="bg-white dark:bg-[#12151e] border border-black/[0.08] dark:border-white/[0.08] rounded-xl p-5 sm:p-6">
+          <h2 className="text-sm font-semibold text-[#111827] dark:text-[#eef0f5] mb-2">
+            Structure & methodology
           </h2>
-          <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
-            PathForge provides carefully structured learning paths for popular tech career
-            tracks. Each roadmap is broken into phases that build on each other, with curated
-            free resources (video tutorials, documentation, and tools) to guide you from
-            beginner to advanced.
+          <p className="text-xs sm:text-sm text-[#4b5565] dark:text-[#a3a9b8] leading-relaxed mb-3">
+            Each roadmap is partitioned into progressive phases that build directly upon prior concepts.
+            Beginners start with foundational principles before transitioning to tooling, frameworks, and architecture.
           </p>
-          <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-            Our roadmaps cover Frontend Development, Backend Development, Machine Learning,
-            DevOps, Cybersecurity, UX/UI Design, Data Science, Mobile Development, Cloud
-            Engineering, and Blockchain/Web3.
+          <p className="text-xs sm:text-sm text-[#4b5565] dark:text-[#a3a9b8] leading-relaxed">
+            Every phase lists specific conceptual milestones alongside verified free learning resources from trusted community educators and official documentation.
           </p>
         </div>
 
-        <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 sm:p-8">
-          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-3">
-            How are roadmaps created?
+        <div className="bg-white dark:bg-[#12151e] border border-black/[0.08] dark:border-white/[0.08] rounded-xl p-5 sm:p-6">
+          <h2 className="text-sm font-semibold text-[#111827] dark:text-[#eef0f5] mb-2">
+            Curated, not generated
           </h2>
-          <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-            Every roadmap is hand-curated by practitioners and regularly reviewed. We select
-            high-quality, freely available resources — primarily from YouTube channels and
-            open documentation — so you can learn without any financial barrier. No AI generation,
-            no auto-scraped content. Just proven paths vetted by people who've walked them.
+          <p className="text-xs sm:text-sm text-[#4b5565] dark:text-[#a3a9b8] leading-relaxed">
+            Content is hand-curated and periodically reviewed against current industry requirements.
+            Links prioritize open documentation, official specifications, and comprehensive video tutorials from verified practitioners.
           </p>
         </div>
 
-        <div className="bg-emerald-50 dark:bg-emerald-900/15 border border-emerald-200 dark:border-emerald-800/40
-          rounded-lg p-6">
-          <h2 className="text-lg font-bold text-emerald-800 dark:text-emerald-300 mb-2">
-            Completely Free
-          </h2>
-          <p className="text-sm text-emerald-700 dark:text-emerald-400 leading-relaxed">
-            PathForge is free and always will be. Every linked resource is freely available.
-            We believe career guidance shouldn't cost anything.
-          </p>
+        <div className="bg-white dark:bg-[#12151e] border border-black/[0.08] dark:border-white/[0.08] rounded-xl p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 className="text-sm font-semibold text-[#111827] dark:text-[#eef0f5] mb-1">
+              Zero cost, completely open
+            </h2>
+            <p className="text-xs text-[#6b7487] dark:text-[#7a8296] leading-relaxed">
+              PathForge requires no subscriptions, signups, or tracking.
+            </p>
+          </div>
+          {onBrowse && (
+            <button
+              onClick={onBrowse}
+              className="inline-flex items-center justify-center px-4 py-2 text-xs font-medium rounded-lg text-white bg-[#0A66C2] hover:bg-[#004182] transition-colors flex-shrink-0"
+            >
+              Explore roadmaps
+            </button>
+          )}
         </div>
       </div>
     </div>

@@ -1,89 +1,73 @@
 import { ArrowLeft } from 'lucide-react'
 import PhaseCard from './PhaseCard'
+import FieldIcon from './FieldIcon'
 
 export default function RoadmapView({ field, onBack }) {
   if (!field) return null
 
+  const phaseCount = field.phases?.length || 0
+  const topicCount = field.phases?.reduce((sum, p) => sum + (p.topics?.length || 0), 0) || 0
+  const resourceCount = field.phases?.reduce((sum, p) => sum + (p.resources?.length || 0), 0) || 0
+
   return (
-    <div>
-      {/* Back button + header */}
-      <div className="mb-8 sm:mb-10">
+    <div className="max-w-4xl mx-auto">
+      {/* Back button & Title header */}
+      <div className="mb-8 pb-6 border-b border-black/[0.08] dark:border-white/[0.08]">
         <button
           onClick={onBack}
-          className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium
-            text-gray-600 dark:text-gray-400
-            hover:text-gray-900 dark:hover:text-white
-            hover:bg-gray-100 dark:hover:bg-gray-800
-            rounded-lg transition-colors mb-4"
+          className="inline-flex items-center gap-1.5 text-xs font-medium text-[#4b5565] dark:text-[#a3a9b8] hover:text-[#111827] dark:hover:text-[#eef0f5] py-1.5 px-2.5 -ml-2.5 rounded-md hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors mb-4"
         >
-          <ArrowLeft className="h-4 w-4" />
-          All Roadmaps
+          <ArrowLeft className="h-3.5 w-3.5" strokeWidth={1.75} />
+          All roadmaps
         </button>
 
         <div className="flex items-center gap-3 mb-2">
-          <div className="inline-flex items-center justify-center w-10 h-10 rounded-lg
-            bg-[#0A66C2]/10 dark:bg-[#0A66C2]/15 text-xl">
-            {field.icon}
+          <div className="w-9 h-9 rounded-lg bg-[#0A66C2]/10 dark:bg-[#0A66C2]/15 flex items-center justify-center text-[#0A66C2]">
+            <FieldIcon fieldId={field.id} className="h-5 w-5" />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-semibold text-[#111827] dark:text-[#eef0f5] tracking-tight">
             {field.name}
           </h1>
         </div>
 
-        <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 max-w-2xl">
+        <p className="text-sm text-[#4b5565] dark:text-[#a3a9b8] leading-relaxed max-w-2xl mb-4">
           {field.desc}
         </p>
 
-        {/* Stats row */}
-        <div className="flex items-center gap-4 mt-4 flex-wrap">
-          <span className="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-medium border
-            bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300
-            border-gray-200 dark:border-gray-700">
-            {field.phases?.length || 0} Phases
-          </span>
-          <span className="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-medium border
-            bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300
-            border-gray-200 dark:border-gray-700">
-            {field.phases?.reduce((sum, p) => sum + (p.topics?.length || 0), 0)} Topics
-          </span>
-          <span className="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-medium border
-            bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300
-            border-gray-200 dark:border-gray-700">
-            {field.phases?.reduce((sum, p) => sum + (p.resources?.length || 0), 0)} Curated Resources
-          </span>
+        {/* Quiet Meta Stats */}
+        <div className="flex items-center gap-4 text-xs font-mono text-[#6b7487] dark:text-[#7a8296] tabular-nums">
+          <span>{phaseCount} {phaseCount === 1 ? 'phase' : 'phases'}</span>
+          <span className="text-black/20 dark:text-white/20">·</span>
+          <span>{topicCount} topics</span>
+          <span className="text-black/20 dark:text-white/20">·</span>
+          <span>{resourceCount} curated links</span>
         </div>
       </div>
 
-      {/* Phase timeline */}
-      <div className="relative">
-        {/* Vertical timeline line */}
-        <div className="absolute left-[29px] top-0 bottom-0 w-px bg-gray-200 dark:bg-gray-800
-          hidden sm:block" />
-
-        <div className="space-y-4">
+      {/* Phase Timeline with Quiet Blueprint Connector */}
+      <div className="relative mb-12">
+        <div className="space-y-3">
           {field.phases?.map((phase, index) => (
             <PhaseCard key={phase.id} phase={phase} index={index} />
           ))}
         </div>
       </div>
 
-      {/* Bottom CTA */}
-      <div className="mt-8 p-6 sm:p-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800
-        rounded-2xl text-center">
-        <p className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-          Ready to start?
-        </p>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-          Begin with Phase 1 and work through each phase at your own pace.
-          These roadmaps are designed to build on each other.
-        </p>
+      {/* Quiet End Note */}
+      <div className="p-5 sm:p-6 rounded-xl bg-white dark:bg-[#12151e] border border-black/[0.08] dark:border-white/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h3 className="text-sm font-medium text-[#111827] dark:text-[#eef0f5] mb-1">
+            Self-paced progression
+          </h3>
+          <p className="text-xs text-[#6b7487] dark:text-[#7a8296] leading-relaxed">
+            Begin with Phase 01. Complete milestones sequentially before advancing to subsequent phases.
+          </p>
+        </div>
         <button
           onClick={onBack}
-          className="inline-flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-semibold
-            text-[#0A66C2] border border-[#0A66C2]/30 rounded-xl
-            hover:bg-[#0A66C2]/5 dark:hover:bg-[#0A66C2]/10 transition-colors"
+          className="inline-flex items-center justify-center px-4 py-2 text-xs font-medium rounded-lg text-[#111827] dark:text-[#eef0f5] bg-black/[0.04] dark:bg-white/[0.06] hover:bg-black/[0.07] dark:hover:bg-white/[0.1] border border-black/[0.06] dark:border-white/[0.06] transition-colors flex-shrink-0"
         >
-          Explore Other Roadmaps
+          Explore other tracks
         </button>
       </div>
     </div>
