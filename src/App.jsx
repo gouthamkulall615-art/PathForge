@@ -1,5 +1,6 @@
 import { useState, useRef, useMemo, useEffect, useCallback } from 'react'
 import { ThemeProvider } from './contexts/ThemeContext'
+import { AuthProvider } from './contexts/AuthContext'
 import { ProgressProvider, useProgress } from './contexts/ProgressContext'
 import Navbar from './components/Navbar'
 import HeroSection from './components/HeroSection'
@@ -348,9 +349,11 @@ function AboutSection({ onBrowse }) {
 const App = () => {
   return (
     <ThemeProvider>
-      <ProgressProvider>
-        <AppContent />
-      </ProgressProvider>
+      <AuthProvider>
+        <ProgressProvider>
+          <AppContent />
+        </ProgressProvider>
+      </AuthProvider>
     </ThemeProvider>
   )
 }

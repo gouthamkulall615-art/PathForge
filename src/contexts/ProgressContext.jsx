@@ -2,36 +2,48 @@ import { createContext, useContext, useState, useEffect, useCallback, useMemo } 
 import { loadProgress, saveProgress } from '../lib/progressStorage'
 import { getTopicId } from '../lib/topicId'
 import { FIELDS } from '../data/fields'
+import { useAuth } from './AuthContext'
 
 const ProgressContext = createContext(null)
 
 export function ProgressProvider({ children }) {
+  const { user } = useAuth()
   const [completed, setCompleted] = useState(() => new Set())
   const [lastVisitedFieldId, setLastVisitedFieldId] = useState(null)
   const [isLoaded, setIsLoaded] = useState(false)
 
-  // Initialize from storage on mount
+  // Reload progress whenever the active user changes (login or logout)
   useEffect(() => {
     let mounted = true
-    loadProgress().then((data) => {
+    const currentUid = user?.id || 'guest'
+
+    loadProgress(currentUid).then((data) => {
       if (mounted) {
         setCompleted(new Set(data.completedTopicIds || []))
         setLastVisitedFieldId(data.lastVisitedFieldId || null)
         setIsLoaded(true)
       }
     })
+
     return () => {
       mounted = false
     }
-  }, [])
+  }, [user?.id])
 
-  // Helper to persist current state
-  const persist = useCallback((newCompletedSet, newLastVisited) => {
-    saveProgress({
-      completedTopicIds: Array.from(newCompletedSet),
-      lastVisitedFieldId: newLastVisited,
-    })
-  }, [])
+  // Helper to persist current state for the active user context
+  const persist = useCallback(
+    (newCompletedSet, newLastVisited) => {
+      const currentUid = user?.id || 'guest'
+      saveProgress(
+        {
+          completedTopicIds: Array.from(newCompletedSet),
+          lastVisitedFieldId: newLastVisited,
+        },
+        currentUid
+      )
+    },
+    [user?.id]
+  )
 
   // Toggle a single topic by ID
   const toggleTopic = useCallback(
@@ -132,7 +144,7 @@ export function ProgressProvider({ children }) {
     [lastVisitedFieldId, persist]
   )
 
-  // Reset all progress across all fields
+  // Reset all progress across all fields for active context
   const resetAll = useCallback(() => {
     const next = new Set()
     setCompleted(next)
@@ -175,4 +187,3 @@ export function useProgress() {
   }
   return context
 }
-

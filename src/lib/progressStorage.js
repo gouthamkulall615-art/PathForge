@@ -1,22 +1,76 @@
-const STORAGE_KEY = 'pathforge:progress:v1'
+const BASE_KEY = 'pathforge:progress:v1'
+const GUEST_KEY = `${BASE_KEY}:guest`
 
 const DEFAULT_STATE = {
   completedTopicIds: [],
   lastVisitedFieldId: null,
 }
 
+// In-memory reference to the current active user ID (null for guest)
+let currentActiveUserId = null
+
 /**
- * Loads progress data from persistent storage.
+ * Sets the active user context for progress storage.
+ * @param {string|null} userId
+ */
+export function setActiveUser(userId) {
+  currentActiveUserId = typeof userId === 'string' && userId.trim() ? userId.trim() : null
+}
+
+/**
+ * Gets the current active user ID (null for guest).
+ * @returns {string|null}
+ */
+export function getActiveUser() {
+  return currentActiveUserId
+}
+
+/**
+ * Returns the localStorage key for a specific user ID or the active context.
+ * @param {string|null} [userId]
+ * @returns {string}
+ */
+function resolveStorageKey(userId) {
+  const targetId = userId !== undefined ? userId : currentActiveUserId
+  if (targetId && targetId !== 'guest') {
+    return `${BASE_KEY}:${targetId}`
+  }
+  return GUEST_KEY
+}
+
+/**
+ * Loads progress data from persistent storage for a user (or active user / guest).
  * Wrapped in try/catch with schema validation and fallback to empty state.
+ *
+ * TODO (Express + MongoDB Backend):
+ * In a future update, swap this localStorage read for an authorized API call:
+ * const response = await fetch('/api/progress', {
+ *   headers: { Authorization: `Bearer ${authToken}` }
+ * })
+ * return await response.json()
+ *
+ * @param {string|null} [userId] - Optional specific user ID (defaults to active user / guest)
  * @returns {Promise<{ completedTopicIds: string[], lastVisitedFieldId: string|null }>}
  */
-export async function loadProgress() {
+export async function loadProgress(userId) {
   try {
     if (typeof window === 'undefined' || !window.localStorage) {
       return { ...DEFAULT_STATE }
     }
 
-    const raw = window.localStorage.getItem(STORAGE_KEY)
+    const key = resolveStorageKey(userId)
+    let raw = window.localStorage.getItem(key)
+
+    // Backward-compatibility: if reading guest progress and GUEST_KEY is missing,
+    // check for legacy unversioned/un-suffixed BASE_KEY and migrate it.
+    if (!raw && key === GUEST_KEY) {
+      const legacyRaw = window.localStorage.getItem(BASE_KEY)
+      if (legacyRaw) {
+        raw = legacyRaw
+        window.localStorage.setItem(GUEST_KEY, legacyRaw)
+      }
+    }
+
     if (!raw) {
       return { ...DEFAULT_STATE }
     }
@@ -46,16 +100,30 @@ export async function loadProgress() {
 }
 
 /**
- * Saves progress data to persistent storage.
+ * Saves progress data to persistent storage for a user (or active user / guest).
+ *
+ * TODO (Express + MongoDB Backend):
+ * In a future update, swap this localStorage write for an authorized API call:
+ * await fetch('/api/progress', {
+ *   method: 'PUT',
+ *   headers: {
+ *     'Content-Type': 'application/json',
+ *     Authorization: `Bearer ${authToken}`
+ *   },
+ *   body: JSON.stringify(payload)
+ * })
+ *
  * @param {{ completedTopicIds: string[], lastVisitedFieldId?: string|null }} data
+ * @param {string|null} [userId] - Optional specific user ID (defaults to active user / guest)
  * @returns {Promise<void>}
  */
-export async function saveProgress(data) {
+export async function saveProgress(data, userId) {
   try {
     if (typeof window === 'undefined' || !window.localStorage) {
       return
     }
 
+    const key = resolveStorageKey(userId)
     const payload = {
       completedTopicIds: Array.isArray(data?.completedTopicIds)
         ? data.completedTopicIds.filter((id) => typeof id === 'string')
@@ -67,9 +135,50 @@ export async function saveProgress(data) {
       updatedAt: new Date().toISOString(),
     }
 
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(payload))
+    window.localStorage.setItem(key, JSON.stringify(payload))
   } catch (err) {
     console.warn('[progressStorage] Failed to save progress to localStorage:', err)
   }
 }
 
+/**
+ * On login, if the guest has progress and the user has none, merge guest progress
+ * into the user's storage key as a union of completed topics.
+ *
+ * @param {string} userId - The authenticated user ID (Google "sub")
+ * @returns {Promise<{ merged: boolean, totalCompleted: number }>}
+ */
+export async function mergeGuestProgressIntoUser(userId) {
+  if (!userId) return { merged: false, totalCompleted: 0 }
+
+  try {
+    const guestProgress = await loadProgress('guest')
+    const userProgress = await loadProgress(userId)
+
+    // Only merge if guest has progress
+    if (guestProgress.completedTopicIds.length > 0) {
+      const unionSet = new Set([
+        ...userProgress.completedTopicIds,
+        ...guestProgress.completedTopicIds,
+      ])
+      const mergedTopics = Array.from(unionSet)
+      const mergedLastVisited =
+        userProgress.lastVisitedFieldId || guestProgress.lastVisitedFieldId || null
+
+      await saveProgress(
+        {
+          completedTopicIds: mergedTopics,
+          lastVisitedFieldId: mergedLastVisited,
+        },
+        userId
+      )
+
+      return { merged: true, totalCompleted: mergedTopics.length }
+    }
+
+    return { merged: false, totalCompleted: userProgress.completedTopicIds.length }
+  } catch (err) {
+    console.warn('[progressStorage] Error merging guest progress into user:', err)
+    return { merged: false, totalCompleted: 0 }
+  }
+}
