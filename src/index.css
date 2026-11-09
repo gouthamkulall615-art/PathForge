@@ -42,3 +42,34 @@ html {
     scroll-behavior: auto !important;
   }
 }
+
+/* "The Forge" Map Animations */
+@keyframes emberFlow {
+  from {
+    stroke-dashoffset: 28;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-ember-flow {
+  animation: emberFlow 1.6s linear infinite;
+}
+
+@keyframes forgeSpark {
+  0% {
+    box-shadow: 0 0 0 0 rgba(10, 102, 194, 0.5);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(10, 102, 194, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(10, 102, 194, 0);
+  }
+}
+
+.forge-completed {
+  animation: forgeSpark 0.5s ease-out;
+}
+

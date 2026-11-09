@@ -4,6 +4,9 @@ const GUEST_KEY = `${BASE_KEY}:guest`
 const BASE_PROFILE_KEY = 'pathforge:profile:v1'
 const GUEST_PROFILE_KEY = `${BASE_PROFILE_KEY}:guest`
 
+const BASE_UI_PREFS_KEY = 'pathforge:uiprefs:v1'
+const GUEST_UI_PREFS_KEY = `${BASE_UI_PREFS_KEY}:guest`
+
 const DEFAULT_STATE = {
   completedTopicIds: [],
   lastVisitedFieldId: null,
@@ -310,6 +313,61 @@ export async function adoptGuestProfile(userId) {
   } catch (err) {
     console.warn('[progressStorage] Failed to adopt guest profile:', err)
     return false
+  }
+}
+
+/**
+ * Returns the localStorage key for UI preferences.
+ * @param {string|null} [userId]
+ * @returns {string}
+ */
+function resolveUiPrefsKey(userId) {
+  const targetId = userId !== undefined ? userId : currentActiveUserId
+  if (targetId && targetId !== 'guest') {
+    return `${BASE_UI_PREFS_KEY}:${targetId}`
+  }
+  return GUEST_UI_PREFS_KEY
+}
+
+/**
+ * Loads UI preferences (e.g. viewMode 'map' | 'list', focusMode boolean).
+ * @param {string|null} [userId]
+ * @returns {Promise<{ viewMode: 'map'|'list'|null, focusMode: boolean|null }>}
+ */
+export async function loadUiPrefs(userId) {
+  try {
+    if (typeof window === 'undefined' || !window.localStorage) {
+      return { viewMode: null, focusMode: null }
+    }
+    const key = resolveUiPrefsKey(userId)
+    const raw = window.localStorage.getItem(key)
+    if (!raw) return { viewMode: null, focusMode: null }
+    const parsed = JSON.parse(raw)
+    return {
+      viewMode: parsed?.viewMode === 'list' || parsed?.viewMode === 'map' ? parsed.viewMode : null,
+      focusMode: typeof parsed?.focusMode === 'boolean' ? parsed.focusMode : null,
+    }
+  } catch (err) {
+    console.warn('[progressStorage] Failed to load UI prefs:', err)
+    return { viewMode: null, focusMode: null }
+  }
+}
+
+/**
+ * Saves UI preferences to localStorage.
+ * @param {{ viewMode?: 'map'|'list', focusMode?: boolean }} prefs
+ * @param {string|null} [userId]
+ * @returns {Promise<void>}
+ */
+export async function saveUiPrefs(prefs, userId) {
+  try {
+    if (typeof window === 'undefined' || !window.localStorage) return
+    const key = resolveUiPrefsKey(userId)
+    const current = await loadUiPrefs(userId)
+    const merged = { ...current, ...prefs }
+    window.localStorage.setItem(key, JSON.stringify(merged))
+  } catch (err) {
+    console.warn('[progressStorage] Failed to save UI prefs:', err)
   }
 }
 
