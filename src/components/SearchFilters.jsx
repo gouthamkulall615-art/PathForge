@@ -86,7 +86,7 @@ export default function SearchFilters({
             value={localQuery}
             onChange={(e) => setLocalQuery(e.target.value)}
             placeholder="Search tracks, topics, or tools (e.g., React, Docker, SQL)..."
-            className="w-full pl-10 pr-20 py-2.5 text-sm bg-white dark:bg-[#12151e] border border-black/[0.08] dark:border-white/[0.08] rounded-xl text-[#111827] dark:text-[#eef0f5] placeholder-[#6b7487] dark:placeholder-[#7a8296] focus:outline-none focus:border-[#0A66C2] focus:ring-1 focus:ring-[#0A66C2] transition-colors"
+            className="w-full pl-10 pr-20 py-2.5 text-sm bg-white dark:bg-[#11141c] border border-black/[0.08] dark:border-white/[0.08] rounded-xl text-[#111827] dark:text-[#eef0f5] placeholder-[#6b7487] dark:placeholder-[#7a8296] focus:outline-none focus:border-[#0A66C2] focus:ring-1 focus:ring-[#0A66C2] transition-colors"
           />
 
           <div className="absolute right-3 flex items-center gap-1.5">
@@ -101,13 +101,13 @@ export default function SearchFilters({
                 className="p-1 text-[#6b7487] dark:text-[#7a8296] hover:text-[#111827] dark:hover:text-[#eef0f5] rounded-md transition-colors"
                 aria-label="Clear search text"
               >
-                <X className="h-3.5 w-3.5" strokeWidth={1.75} />
+                <X className="h-3.5 w-3.5" strokeWidth={1.5} />
               </button>
             )}
 
             {/* "/" Keyboard hint badge */}
             <kbd
-              className="hidden sm:inline-flex items-center justify-center px-1.5 py-0.5 text-[11px] font-mono text-[#6b7487] dark:text-[#7a8296] bg-black/[0.04] dark:bg-white/[0.06] border border-black/[0.06] dark:border-white/[0.06] rounded select-none pointer-events-none"
+              className="hidden sm:inline-flex items-center justify-center px-1.5 py-0.5 text-[11px] font-mono text-[#6b7487] dark:text-[#7a8296] bg-black/[0.04] dark:bg-[#1a1e28] border border-black/[0.08] dark:border-white/[0.08] rounded-md select-none pointer-events-none"
               title="Press / to focus search"
             >
               /
@@ -119,7 +119,7 @@ export default function SearchFilters({
       {/* Filter Row (Responsive with horizontal scrolling on mobile) */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-0.5">
         <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-none">
-          <div className="inline-flex items-center gap-1.5 text-xs text-[#6b7487] dark:text-[#7a8296] mr-1 flex-shrink-0">
+          <div className="inline-flex items-center gap-1.5 text-xs text-[#6b7487] dark:text-[#7a8296] mr-1 flex-shrink-0 font-mono">
             <SlidersHorizontal className="h-3.5 w-3.5" strokeWidth={1.5} />
             <span>Filters:</span>
           </div>
@@ -129,7 +129,7 @@ export default function SearchFilters({
             value={difficulty}
             onChange={(e) => onDifficultyChange(e.target.value)}
             aria-label="Filter by difficulty level"
-            className="text-xs py-1.5 pl-2.5 pr-7 rounded-lg bg-white dark:bg-[#12151e] border border-black/[0.08] dark:border-white/[0.08] text-[#111827] dark:text-[#eef0f5] focus:outline-none focus:border-[#0A66C2] focus:ring-1 focus:ring-[#0A66C2] transition-colors flex-shrink-0"
+            className="text-xs py-1.5 pl-2.5 pr-7 rounded-lg bg-white dark:bg-[#11141c] border border-black/[0.08] dark:border-white/[0.08] text-[#111827] dark:text-[#eef0f5] focus:outline-none focus:border-[#0A66C2] focus:ring-1 focus:ring-[#0A66C2] transition-colors flex-shrink-0"
           >
             <option value="all">Difficulty: All</option>
             <option value="beginner">Beginner</option>
@@ -142,7 +142,7 @@ export default function SearchFilters({
             value={resourceType}
             onChange={(e) => onResourceTypeChange(e.target.value)}
             aria-label="Filter by resource type"
-            className="text-xs py-1.5 pl-2.5 pr-7 rounded-lg bg-white dark:bg-[#12151e] border border-black/[0.08] dark:border-white/[0.08] text-[#111827] dark:text-[#eef0f5] focus:outline-none focus:border-[#0A66C2] focus:ring-1 focus:ring-[#0A66C2] transition-colors flex-shrink-0"
+            className="text-xs py-1.5 pl-2.5 pr-7 rounded-lg bg-white dark:bg-[#11141c] border border-black/[0.08] dark:border-white/[0.08] text-[#111827] dark:text-[#eef0f5] focus:outline-none focus:border-[#0A66C2] focus:ring-1 focus:ring-[#0A66C2] transition-colors flex-shrink-0"
           >
             <option value="all">Resources: All</option>
             <option value="yt">Videos (YT)</option>
@@ -154,7 +154,7 @@ export default function SearchFilters({
             value={progressStatus}
             onChange={(e) => onProgressStatusChange(e.target.value)}
             aria-label="Filter by study progress"
-            className="text-xs py-1.5 pl-2.5 pr-7 rounded-lg bg-white dark:bg-[#12151e] border border-black/[0.08] dark:border-white/[0.08] text-[#111827] dark:text-[#eef0f5] focus:outline-none focus:border-[#0A66C2] focus:ring-1 focus:ring-[#0A66C2] transition-colors flex-shrink-0"
+            className="text-xs py-1.5 pl-2.5 pr-7 rounded-lg bg-white dark:bg-[#11141c] border border-black/[0.08] dark:border-white/[0.08] text-[#111827] dark:text-[#eef0f5] focus:outline-none focus:border-[#0A66C2] focus:ring-1 focus:ring-[#0A66C2] transition-colors flex-shrink-0"
           >
             <option value="all">Status: All</option>
             <option value="not-started">Not started</option>
@@ -169,7 +169,7 @@ export default function SearchFilters({
               value={sort}
               onChange={(e) => onSortChange(e.target.value)}
               aria-label="Sort tracks"
-              className="text-xs py-1.5 pl-2.5 pr-7 rounded-lg bg-white dark:bg-[#12151e] border border-black/[0.08] dark:border-white/[0.08] text-[#111827] dark:text-[#eef0f5] focus:outline-none focus:border-[#0A66C2] focus:ring-1 focus:ring-[#0A66C2] transition-colors"
+              className="text-xs py-1.5 pl-2.5 pr-7 rounded-lg bg-white dark:bg-[#11141c] border border-black/[0.08] dark:border-white/[0.08] text-[#111827] dark:text-[#eef0f5] focus:outline-none focus:border-[#0A66C2] focus:ring-1 focus:ring-[#0A66C2] transition-colors"
             >
               <option value="default">Sort: Default</option>
               <option value="az">A to Z</option>

@@ -38,7 +38,7 @@ export default function RoadmapView({ field, onBack, searchQuery = '' }) {
           onClick={onBack}
           className="inline-flex items-center gap-1.5 text-xs font-medium text-[#4b5565] dark:text-[#a3a9b8] hover:text-[#111827] dark:hover:text-[#eef0f5] py-1.5 px-2.5 -ml-2.5 rounded-md hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors mb-4"
         >
-          <ArrowLeft className="h-3.5 w-3.5" strokeWidth={1.75} />
+          <ArrowLeft className="h-3.5 w-3.5" strokeWidth={1.5} />
           All roadmaps
         </button>
 
@@ -56,19 +56,19 @@ export default function RoadmapView({ field, onBack, searchQuery = '' }) {
           {done > 0 && (
             <div>
               {confirmingReset ? (
-                <div className="flex items-center gap-2 p-1 bg-black/[0.04] dark:bg-white/[0.06] rounded-lg border border-black/[0.08] dark:border-white/[0.08]">
-                  <span className="text-[11px] text-[#4b5565] dark:text-[#a3a9b8] px-2">
+                <div className="flex items-center gap-2 p-1 bg-black/[0.04] dark:bg-[#1a1e28] rounded-lg border border-black/[0.08] dark:border-white/[0.08]">
+                  <span className="text-[11px] text-[#4b5565] dark:text-[#a3a9b8] px-2 font-mono">
                     Reset progress?
                   </span>
                   <button
                     onClick={handleReset}
-                    className="text-[11px] font-medium px-2 py-1 rounded bg-red-600 text-white hover:bg-red-700 transition-colors"
+                    className="text-[11px] font-medium px-2 py-1 rounded-md bg-red-600 text-white hover:bg-red-700 transition-colors"
                   >
                     Confirm
                   </button>
                   <button
                     onClick={() => setConfirmingReset(false)}
-                    className="text-[11px] px-2 py-1 rounded text-[#4b5565] dark:text-[#a3a9b8] hover:text-[#111827] dark:hover:text-[#eef0f5] transition-colors"
+                    className="text-[11px] px-2 py-1 rounded-md text-[#4b5565] dark:text-[#a3a9b8] hover:text-[#111827] dark:hover:text-[#eef0f5] transition-colors"
                   >
                     Cancel
                   </button>
@@ -76,10 +76,10 @@ export default function RoadmapView({ field, onBack, searchQuery = '' }) {
               ) : (
                 <button
                   onClick={() => setConfirmingReset(true)}
-                  className="inline-flex items-center gap-1.5 text-xs text-[#6b7487] dark:text-[#7a8296] hover:text-red-600 dark:hover:text-red-400 py-1.5 px-2.5 rounded-lg border border-black/[0.06] dark:border-white/[0.06] hover:border-red-500/30 transition-colors"
+                  className="inline-flex items-center gap-1.5 text-xs text-[#6b7487] dark:text-[#7a8296] hover:text-red-600 dark:hover:text-red-400 py-1.5 px-2.5 rounded-lg border border-black/[0.08] dark:border-white/[0.08] hover:border-red-500/30 transition-colors"
                   title="Reset completed milestones for this track"
                 >
-                  <RotateCcw className="h-3 w-3" strokeWidth={1.75} />
+                  <RotateCcw className="h-3 w-3" strokeWidth={1.5} />
                   Reset progress
                 </button>
               )}
@@ -104,15 +104,15 @@ export default function RoadmapView({ field, onBack, searchQuery = '' }) {
       </div>
 
       {/* Overall Progress Summary Bar */}
-      <div className="mb-8 p-4 sm:p-5 rounded-xl bg-white dark:bg-[#12151e] border border-black/[0.08] dark:border-white/[0.08] shadow-sm">
+      <div className="mb-8 p-4 sm:p-5 rounded-xl bg-white dark:bg-[#11141c] border border-black/[0.08] dark:border-white/[0.08] shadow-sm">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
             <span className="text-xs font-medium text-[#111827] dark:text-[#eef0f5]">
               Overall roadmap progress
             </span>
             {isComplete && (
-              <span className="inline-flex items-center gap-1 text-[11px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-                <CheckCircle2 className="h-3 w-3 stroke-[2.5]" />
+              <span className="inline-flex items-center gap-1 text-[11px] font-mono px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                <CheckCircle2 className="h-3 w-3 stroke-[2]" />
                 100% Completed
               </span>
             )}

@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useTheme } from '../contexts/ThemeContext'
 import { useAuth } from '../contexts/AuthContext'
 import { useProfile } from '../contexts/ProfileContext'
-import { Sun, Moon, Menu, X, Route, LogIn, LogOut, Sparkles, RotateCcw } from 'lucide-react'
+import { Sun, Moon, Menu, X, Route, LogIn, LogOut, Compass, RotateCcw } from 'lucide-react'
 import AuthModal from './AuthModal'
 
 function getInitials(name) {
@@ -162,7 +162,7 @@ export default function Navbar({ activeSection, onNavigate }) {
                     <div
                       role="menu"
                       aria-orientation="vertical"
-                      className="absolute right-0 top-full mt-2 w-56 rounded-xl bg-white dark:bg-[#12151e] border border-black/[0.08] dark:border-white/[0.08] shadow-xl p-1.5 z-50 animate-in fade-in zoom-in-95 duration-100"
+                      className="absolute right-0 top-full mt-2 w-56 rounded-xl bg-white dark:bg-[#11141c] border border-black/[0.08] dark:border-white/[0.08] shadow-xl p-1.5 z-50 animate-in fade-in zoom-in-95 duration-100"
                     >
                       <div className="px-2.5 py-2">
                         <p className="text-xs font-semibold text-[#111827] dark:text-[#eef0f5] truncate">
@@ -173,7 +173,7 @@ export default function Navbar({ activeSection, onNavigate }) {
                         </p>
                       </div>
 
-                      <div className="h-px bg-black/[0.06] dark:bg-white/[0.06] my-1" />
+                      <div className="h-px bg-black/[0.08] dark:border-white/[0.08] my-1" />
 
                       {hasProfile && (
                         <button
@@ -184,7 +184,7 @@ export default function Navbar({ activeSection, onNavigate }) {
                           role="menuitem"
                           className="w-full flex items-center gap-2 px-2.5 py-1.5 text-xs text-[#4b5565] dark:text-[#a3a9b8] hover:text-[#111827] dark:hover:text-[#eef0f5] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] rounded-lg transition-colors text-left"
                         >
-                          <Sparkles className="h-3.5 w-3.5 text-[#0A66C2]" strokeWidth={1.5} />
+                          <Compass className="h-3.5 w-3.5 text-[#0A66C2]" strokeWidth={1.5} />
                           <span>My Personalized Path</span>
                         </button>
                       )}
@@ -201,7 +201,7 @@ export default function Navbar({ activeSection, onNavigate }) {
                         <span>Retake assessment</span>
                       </button>
 
-                      <div className="h-px bg-black/[0.06] dark:bg-white/[0.06] my-1" />
+                      <div className="h-px bg-black/[0.08] dark:border-white/[0.08] my-1" />
 
                       <button
                         onClick={() => {
@@ -257,7 +257,7 @@ export default function Navbar({ activeSection, onNavigate }) {
             onClick={() => setMobileOpen(false)}
           />
 
-          <div className="absolute top-0 left-0 h-full w-72 bg-white dark:bg-[#12151e] border-r border-black/[0.08] dark:border-white/[0.08] shadow-lg flex flex-col">
+          <div className="absolute top-0 left-0 h-full w-72 bg-white dark:bg-[#11141c] border-r border-black/[0.08] dark:border-white/[0.08] shadow-lg flex flex-col">
             <div className="flex items-center justify-between px-4 h-14 border-b border-black/[0.08] dark:border-white/[0.08]">
               <div className="flex items-center gap-2">
                 <div className="w-6 h-6 rounded-md bg-[#0A66C2]/10 dark:bg-[#0A66C2]/15 flex items-center justify-center text-[#0A66C2]">
@@ -302,7 +302,7 @@ export default function Navbar({ activeSection, onNavigate }) {
                   }}
                   className="w-full text-left px-3 py-2 text-sm rounded-md transition-colors text-[#0A66C2] font-medium flex items-center gap-2"
                 >
-                  <Sparkles className="h-3.5 w-3.5" />
+                  <Compass className="h-3.5 w-3.5" strokeWidth={1.5} />
                   <span>Start Assessment</span>
                 </button>
               )}

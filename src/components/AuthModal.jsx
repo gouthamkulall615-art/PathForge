@@ -89,13 +89,13 @@ export default function AuthModal({ isOpen, onClose }) {
         aria-modal="true"
         aria-labelledby="auth-modal-title"
         aria-describedby="auth-modal-desc"
-        className="w-full max-w-sm rounded-2xl bg-white dark:bg-[#12151e] border border-black/[0.08] dark:border-white/[0.08] shadow-2xl p-6 transition-colors"
+        className="w-full max-w-sm rounded-xl bg-white dark:bg-[#11141c] border border-black/[0.08] dark:border-white/[0.08] p-6 transition-colors shadow-lg"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header with logo icon and close button */}
         <div className="flex items-center justify-between mb-4">
           <div className="w-8 h-8 rounded-lg bg-[#0A66C2]/10 dark:bg-[#0A66C2]/15 flex items-center justify-center text-[#0A66C2]">
-            <Route className="h-4 w-4" strokeWidth={1.75} />
+            <Route className="h-4 w-4" strokeWidth={1.5} />
           </div>
 
           <button
@@ -119,7 +119,7 @@ export default function AuthModal({ isOpen, onClose }) {
             id="auth-modal-desc"
             className="text-xs text-[#4b5565] dark:text-[#a3a9b8] leading-relaxed"
           >
-            Sign in to save your progress across sessions and synchronize completed milestones.
+            Save your progress across sessions and synchronize completed milestones.
           </p>
         </div>
 
@@ -147,7 +147,7 @@ export default function AuthModal({ isOpen, onClose }) {
         {/* Quiet footer reassurance */}
         <div className="mt-6 pt-4 border-t border-black/[0.06] dark:border-white/[0.06] flex items-center justify-center gap-1.5 text-[11px] text-[#6b7487] dark:text-[#7a8296]">
           <ShieldCheck className="h-3.5 w-3.5 text-[#0A66C2]" strokeWidth={1.5} />
-          <span>No password required · Free forever</span>
+          <span>Local and cloud progress synced</span>
         </div>
       </div>
     </div>

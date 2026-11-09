@@ -13,7 +13,7 @@ import OnboardingQuiz from './components/onboarding/OnboardingQuiz'
 import MyPath from './components/MyPath'
 import { searchAndFilterFields } from './lib/searchFields'
 import { FIELDS } from './data/fields'
-import { ArrowRight, RotateCcw, Sparkles } from 'lucide-react'
+import { ArrowRight, RotateCcw, Compass } from 'lucide-react'
 
 // Read initial filter values from URL query parameters
 function getInitialParams() {
@@ -170,7 +170,7 @@ function AppContent() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f6f8fb] dark:bg-[#0b0d13] text-[#111827] dark:text-[#eef0f5] transition-colors duration-150">
+    <div className="min-h-screen bg-[#f5f7fa] dark:bg-[#0b0d14] text-[#111827] dark:text-[#eef0f5] transition-colors duration-150">
       <Navbar activeSection={activeSection} onNavigate={handleNavigate} />
 
       <main className="px-4 sm:px-6 max-w-6xl mx-auto py-6 sm:py-8">
@@ -215,17 +215,17 @@ function AppContent() {
             <div ref={gridRef} className="scroll-mt-20">
               {/* Personalized Path CTA banner if user has no profile */}
               {!hasProfile ? (
-                <div className="mb-6 p-4 rounded-xl bg-blue-500/[0.04] dark:bg-blue-500/[0.08] border border-[#0A66C2]/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-sm">
+                <div className="mb-6 p-4 rounded-xl bg-white dark:bg-[#11141c] border border-black/[0.08] dark:border-white/[0.08] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-sm">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-[#0A66C2]/15 text-[#0A66C2] flex items-center justify-center flex-shrink-0">
-                      <Sparkles className="h-4 w-4" />
+                    <div className="w-8 h-8 rounded-lg bg-[#0A66C2]/10 dark:bg-[#0A66C2]/15 text-[#0A66C2] flex items-center justify-center flex-shrink-0">
+                      <Compass className="h-4 w-4" strokeWidth={1.5} />
                     </div>
                     <div>
                       <p className="text-xs font-semibold text-[#111827] dark:text-[#eef0f5]">
-                        Looking for a personalized learning roadmap?
+                        Personalized learning path available
                       </p>
                       <p className="text-[11px] text-[#6b7487] dark:text-[#7a8296]">
-                        Take our 3-minute technical assessment to skip foundations you already know and get calendar milestone dates.
+                        Take a quick skill check to skip foundations and get calendar milestone targets.
                       </p>
                     </div>
                   </div>
@@ -233,33 +233,33 @@ function AppContent() {
                     onClick={() => handleNavigate('quiz')}
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg text-white bg-[#0A66C2] hover:bg-[#004182] transition-colors flex-shrink-0"
                   >
-                    Take Assessment
-                    <ArrowRight className="h-3 w-3" strokeWidth={1.75} />
+                    Take assessment
+                    <ArrowRight className="h-3 w-3" strokeWidth={1.5} />
                   </button>
                 </div>
               ) : (
-                <div className="mb-6 p-3.5 rounded-xl bg-white dark:bg-[#12151e] border border-black/[0.08] dark:border-white/[0.08] flex items-center justify-between gap-3 shadow-sm">
+                <div className="mb-6 p-3.5 rounded-xl bg-white dark:bg-[#11141c] border border-black/[0.08] dark:border-white/[0.08] flex items-center justify-between gap-3 shadow-sm">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-6 h-6 rounded-md bg-blue-500/10 text-[#0A66C2] flex items-center justify-center">
-                      <Sparkles className="h-3.5 w-3.5" />
+                    <div className="w-6 h-6 rounded-md bg-[#0A66C2]/10 dark:bg-[#0A66C2]/15 text-[#0A66C2] flex items-center justify-center">
+                      <Compass className="h-3.5 w-3.5" strokeWidth={1.5} />
                     </div>
                     <span className="text-xs font-medium text-[#111827] dark:text-[#eef0f5]">
-                      Your personalized roadmap is active.
+                      Personalized roadmap active
                     </span>
                   </div>
                   <button
                     onClick={() => handleNavigate('mypath')}
                     className="inline-flex items-center gap-1 text-xs font-medium text-[#0A66C2] hover:underline"
                   >
-                    View My Path
-                    <ArrowRight className="h-3 w-3" />
+                    View my path
+                    <ArrowRight className="h-3 w-3" strokeWidth={1.5} />
                   </button>
                 </div>
               )}
 
               {/* Optional "Continue where you left off" banner */}
               {lastVisitedField && (
-                <div className="mb-6 p-4 rounded-xl bg-white dark:bg-[#12151e] border border-[#0A66C2]/30 dark:border-[#0A66C2]/40 flex items-center justify-between gap-4">
+                <div className="mb-6 p-4 rounded-xl bg-white dark:bg-[#11141c] border border-black/[0.08] dark:border-white/[0.08] flex items-center justify-between gap-4 shadow-sm">
                   <div className="flex items-center gap-3 min-w-0">
                     <div className="w-8 h-8 rounded-lg bg-[#0A66C2]/10 dark:bg-[#0A66C2]/15 flex items-center justify-center text-[#0A66C2] flex-shrink-0">
                       <FieldIcon fieldId={lastVisitedField.id} className="h-4 w-4" />
@@ -281,7 +281,7 @@ function AppContent() {
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg text-white bg-[#0A66C2] hover:bg-[#004182] transition-colors flex-shrink-0"
                   >
                     Resume
-                    <ArrowRight className="h-3 w-3" strokeWidth={1.75} />
+                    <ArrowRight className="h-3 w-3" strokeWidth={1.5} />
                   </button>
                 </div>
               )}
@@ -305,7 +305,7 @@ function AppContent() {
 
               {/* Grid or Empty Results State */}
               {filteredFields.length === 0 ? (
-                <div className="text-center py-12 px-4 rounded-xl bg-white dark:bg-[#12151e] border border-black/[0.08] dark:border-white/[0.08] my-6">
+                <div className="text-center py-12 px-4 rounded-xl bg-white dark:bg-[#11141c] border border-black/[0.08] dark:border-white/[0.08] my-6">
                   <p className="text-sm font-medium text-[#111827] dark:text-[#eef0f5] mb-1">
                     No tracks match your search
                   </p>
@@ -339,7 +339,7 @@ function AppContent() {
       </main>
 
       {/* Footer */}
-      <footer className="mt-16 border-t border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#0d0f14] transition-colors duration-150">
+      <footer className="mt-16 border-t border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#0b0d14] transition-colors duration-150">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#6b7487] dark:text-[#7a8296]">
           <p>
             © {new Date().getFullYear()} PathForge. Structured engineering roadmaps.
@@ -369,7 +369,7 @@ function AboutSection({ onBrowse }) {
       </div>
 
       <div className="space-y-4">
-        <div className="bg-white dark:bg-[#12151e] border border-black/[0.08] dark:border-white/[0.08] rounded-xl p-5 sm:p-6">
+        <div className="bg-white dark:bg-[#11141c] border border-black/[0.08] dark:border-white/[0.08] rounded-xl p-5 sm:p-6">
           <h2 className="text-sm font-semibold text-[#111827] dark:text-[#eef0f5] mb-2">
             Structure & methodology
           </h2>
@@ -382,7 +382,7 @@ function AboutSection({ onBrowse }) {
           </p>
         </div>
 
-        <div className="bg-white dark:bg-[#12151e] border border-black/[0.08] dark:border-white/[0.08] rounded-xl p-5 sm:p-6">
+        <div className="bg-white dark:bg-[#11141c] border border-black/[0.08] dark:border-white/[0.08] rounded-xl p-5 sm:p-6">
           <h2 className="text-sm font-semibold text-[#111827] dark:text-[#eef0f5] mb-2">
             Curated, not generated
           </h2>
@@ -393,7 +393,7 @@ function AboutSection({ onBrowse }) {
         </div>
 
         {/* Data & Privacy notice with optional Reset All button */}
-        <div className="bg-white dark:bg-[#12151e] border border-black/[0.08] dark:border-white/[0.08] rounded-xl p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="bg-white dark:bg-[#11141c] border border-black/[0.08] dark:border-white/[0.08] rounded-xl p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h2 className="text-sm font-semibold text-[#111827] dark:text-[#eef0f5] mb-1">
               Local progress & privacy
@@ -437,7 +437,7 @@ function AboutSection({ onBrowse }) {
           )}
         </div>
 
-        <div className="bg-white dark:bg-[#12151e] border border-black/[0.08] dark:border-white/[0.08] rounded-xl p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="bg-white dark:bg-[#11141c] border border-black/[0.08] dark:border-white/[0.08] rounded-xl p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h2 className="text-sm font-semibold text-[#111827] dark:text-[#eef0f5] mb-1">
               Zero cost, completely open

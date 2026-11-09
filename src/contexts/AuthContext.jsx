@@ -248,7 +248,7 @@ export function AuthProvider({ children }) {
           aria-live="polite"
           className="fixed bottom-5 right-5 z-50 max-w-sm w-full animate-in fade-in slide-in-from-bottom-2 duration-200"
         >
-          <div className="flex items-start gap-3 p-3.5 rounded-xl bg-white dark:bg-[#12151e] border border-black/[0.08] dark:border-white/[0.08] shadow-lg text-xs">
+          <div className="flex items-start gap-3 p-3.5 rounded-xl bg-white dark:bg-[#11141c] border border-black/[0.08] dark:border-white/[0.08] shadow-lg text-xs">
             <div className="flex-shrink-0 mt-0.5">
               {toast.type === 'success' && (
                 <CheckCircle2 className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />

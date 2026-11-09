@@ -4,7 +4,6 @@ import {
   ArrowRight,
   ArrowLeft,
   Check,
-  Sparkles,
   HelpCircle,
   Clock,
   Calendar,
@@ -14,7 +13,7 @@ import {
   Award,
   Zap,
   Target,
-  RefreshCw,
+  RotateCcw,
 } from 'lucide-react'
 import { FIELDS } from '../../data/fields'
 import { QUIZ_BANK, INTEREST_QUESTIONS } from '../../data/quizBank'
@@ -328,52 +327,48 @@ export default function OnboardingQuiz({ onComplete, onSkip }) {
   // Forging Blueprint Screen
   if (isForging) {
     return (
-      <div className="min-h-[80vh] flex flex-col items-center justify-center px-4 py-16 text-center animate-fade-in">
-        <div className="relative mb-6">
-          <div className="h-20 w-20 rounded-2xl bg-blue-500/10 dark:bg-blue-500/20 flex items-center justify-center border border-blue-500/30 text-[#0A66C2]">
-            <Compass className="h-10 w-10 animate-spin" style={{ animationDuration: '4s' }} />
-          </div>
-          <div className="absolute -top-1 -right-1 flex h-4 w-4">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-4 w-4 bg-[#0A66C2]"></span>
-          </div>
+      <div className="min-h-[80vh] flex flex-col items-center justify-center px-4 py-16 text-center">
+        <div className="w-12 h-12 rounded-xl bg-[#0A66C2]/10 dark:bg-[#0A66C2]/15 border border-[#0A66C2]/20 text-[#0A66C2] flex items-center justify-center mb-6">
+          <Compass className="h-6 w-6" strokeWidth={1.5} />
         </div>
 
-        <h2 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100 sm:text-3xl">
-          Forging your personalized path...
+        <h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-[#111827] dark:text-[#eef0f5]">
+          Calibrating personalized path
         </h2>
-        <p className="mt-3 text-sm text-neutral-600 dark:text-neutral-400 max-w-md h-6">
+        <p className="mt-2 text-xs font-mono text-[#6b7487] dark:text-[#7a8296] max-w-sm h-5">
           {forgingPhaseText}
         </p>
 
-        <div className="mt-8 w-64 h-1.5 bg-neutral-200 dark:bg-neutral-800 rounded-full overflow-hidden">
-          <div className="h-full bg-[#0A66C2] rounded-full animate-pulse w-full"></div>
+        <div className="mt-6 w-56 h-1 bg-black/[0.06] dark:bg-white/[0.08] rounded-full overflow-hidden">
+          <div className="h-full bg-[#0A66C2] rounded-full transition-all duration-300 w-3/4" />
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-[#f6f8fb] dark:bg-[#0b0d13] text-neutral-900 dark:text-neutral-100 transition-colors">
+    <div className="min-h-screen bg-[#f5f7fa] dark:bg-[#0b0d14] text-[#111827] dark:text-[#eef0f5] transition-colors duration-150">
       {/* Quiz Top Navigation Bar */}
-      <header className="sticky top-0 z-30 border-b border-black/[0.08] dark:border-white/[0.08] bg-[#f6f8fb]/80 dark:bg-[#0b0d13]/80 backdrop-blur-md">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center h-8 w-8 rounded-lg bg-blue-500/10 text-[#0A66C2] font-bold">
-              <Compass className="h-4 w-4" />
+      <header className="sticky top-0 z-30 border-b border-black/[0.08] dark:border-white/[0.08] bg-[#f5f7fa]/90 dark:bg-[#0b0d14]/90 backdrop-blur-md">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className="flex items-center justify-center h-7 w-7 rounded-lg bg-[#0A66C2]/10 dark:bg-[#0A66C2]/15 text-[#0A66C2]">
+              <Compass className="h-4 w-4" strokeWidth={1.5} />
             </div>
-            <span className="font-semibold tracking-tight text-sm">PathForge Assessment</span>
+            <span className="font-semibold tracking-tight text-sm text-[#111827] dark:text-[#eef0f5]">
+              PathForge Assessment
+            </span>
           </div>
 
           <div className="flex items-center gap-4">
-            <span className="text-xs font-medium text-neutral-500 dark:text-neutral-400 hidden sm:inline">
+            <span className="text-xs font-mono text-[#6b7487] dark:text-[#7a8296] hidden sm:inline tabular-nums">
               Step {step} of 6
             </span>
             {onSkip && (
               <button
                 type="button"
                 onClick={onSkip}
-                className="text-xs font-medium text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 transition-colors px-2 py-1 rounded"
+                className="text-xs font-medium text-[#6b7487] hover:text-[#111827] dark:text-[#7a8296] dark:hover:text-[#eef0f5] transition-colors px-2.5 py-1 rounded-md"
               >
                 Skip for now
               </button>
@@ -382,9 +377,9 @@ export default function OnboardingQuiz({ onComplete, onSkip }) {
         </div>
 
         {/* Thin progress bar */}
-        <div className="w-full bg-neutral-200 dark:bg-neutral-800 h-1">
+        <div className="w-full bg-black/[0.06] dark:bg-white/[0.08] h-0.5">
           <div
-            className="bg-[#0A66C2] h-full transition-all duration-300 ease-out"
+            className="bg-[#0A66C2] h-full transition-[width] duration-300 ease-out"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
@@ -396,34 +391,33 @@ export default function OnboardingQuiz({ onComplete, onSkip }) {
         {/* INTEREST SUB-QUIZ MODAL / VIEW                           */}
         {/* ========================================================= */}
         {inInterestQuiz ? (
-          <div className="space-y-8 animate-fade-in">
+          <div className="space-y-6">
             {!recommendedTracks ? (
               <div className="space-y-6">
                 <div>
-                  <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-500/10 text-[#0A66C2] mb-3">
-                    <Sparkles className="h-3.5 w-3.5" />
-                    Track Recommendation Quiz ({interestIdx + 1}/4)
+                  <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[11px] font-mono bg-[#0A66C2]/10 text-[#0A66C2] mb-3 border border-[#0A66C2]/20">
+                    Track discovery ({interestIdx + 1}/4)
                   </div>
-                  <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
+                  <h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-[#111827] dark:text-[#eef0f5]">
                     {INTEREST_QUESTIONS[interestIdx]?.prompt}
                   </h2>
-                  <p className="mt-1.5 text-xs text-neutral-500 dark:text-neutral-400">
-                    Press 1–4 on your keyboard or click an option below.
+                  <p className="mt-1.5 text-xs text-[#6b7487] dark:text-[#7a8296] font-mono">
+                    Press 1–4 on your keyboard or select below.
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 gap-3">
+                <div className="grid grid-cols-1 gap-2.5">
                   {INTEREST_QUESTIONS[interestIdx]?.options.map((opt, idx) => (
                     <button
                       key={idx}
                       type="button"
                       onClick={() => handleInterestChoice(opt.weights)}
-                      className="group flex items-start gap-4 p-4 rounded-xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#131720] hover:border-[#0A66C2]/60 hover:bg-blue-500/[0.02] dark:hover:bg-blue-500/[0.04] text-left transition-all focus:outline-none focus:ring-2 focus:ring-[#0A66C2]"
+                      className="group flex items-start gap-3.5 p-4 rounded-xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#11141c] hover:border-black/20 dark:hover:border-white/20 text-left transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A66C2]"
                     >
-                      <span className="flex-shrink-0 flex items-center justify-center h-6 w-6 rounded-md bg-neutral-100 dark:bg-neutral-800 text-xs font-semibold text-neutral-600 dark:text-neutral-400 group-hover:bg-[#0A66C2] group-hover:text-white transition-colors">
+                      <span className="flex-shrink-0 flex items-center justify-center h-6 w-6 rounded-md bg-black/[0.04] dark:bg-[#1a1e28] text-xs font-mono font-medium text-[#6b7487] dark:text-[#7a8296] group-hover:bg-[#0A66C2] group-hover:text-white transition-colors">
                         {idx + 1}
                       </span>
-                      <span className="text-sm text-neutral-800 dark:text-neutral-200 group-hover:text-neutral-900 dark:group-hover:text-white font-medium">
+                      <span className="text-sm text-[#111827] dark:text-[#eef0f5] font-medium leading-relaxed">
                         {opt.label}
                       </span>
                     </button>
@@ -432,32 +426,32 @@ export default function OnboardingQuiz({ onComplete, onSkip }) {
               </div>
             ) : (
               <div className="space-y-6 text-center py-6">
-                <div className="inline-flex items-center justify-center h-12 w-12 rounded-full bg-emerald-500/10 text-emerald-500 mx-auto">
-                  <Check className="h-6 w-6" />
+                <div className="inline-flex items-center justify-center h-10 w-10 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 mx-auto">
+                  <Check className="h-5 w-5 stroke-[2]" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
-                    We found your ideal tracks!
+                  <h2 className="text-xl sm:text-2xl font-semibold tracking-tight text-[#111827] dark:text-[#eef0f5]">
+                    Recommended career tracks
                   </h2>
-                  <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400 max-w-md mx-auto">
-                    Based on your problem-solving preferences and technical interests:
+                  <p className="mt-1.5 text-xs text-[#6b7487] dark:text-[#7a8296] max-w-md mx-auto">
+                    Matched from your engineering preferences and technical interests.
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-lg mx-auto text-left">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-lg mx-auto text-left">
                   {FIELDS.filter((f) => f.id === recommendedTracks.primary).map((field) => (
                     <div
                       key={field.id}
-                      className="p-4 rounded-xl border-2 border-[#0A66C2] bg-blue-500/5 dark:bg-blue-500/10"
+                      className="p-4 rounded-xl border border-[#0A66C2] bg-black/[0.02] dark:bg-[#1a1e28]"
                     >
-                      <span className="inline-block text-[11px] font-semibold text-[#0A66C2] uppercase tracking-wider mb-2">
+                      <span className="inline-block text-[11px] font-mono font-medium text-[#0A66C2] uppercase tracking-wider mb-2">
                         Primary Track
                       </span>
                       <div className="flex items-center gap-2.5">
                         <FieldIcon fieldId={field.id} className="h-5 w-5 text-[#0A66C2]" />
-                        <h3 className="font-semibold text-base">{field.name}</h3>
+                        <h3 className="font-medium text-base text-[#111827] dark:text-[#eef0f5]">{field.name}</h3>
                       </div>
-                      <p className="mt-2 text-xs text-neutral-500 dark:text-neutral-400 line-clamp-2">
+                      <p className="mt-2 text-xs text-[#6b7487] dark:text-[#7a8296] line-clamp-2">
                         {field.desc}
                       </p>
                     </div>
@@ -467,37 +461,37 @@ export default function OnboardingQuiz({ onComplete, onSkip }) {
                     FIELDS.filter((f) => f.id === recommendedTracks.secondary).map((field) => (
                       <div
                         key={field.id}
-                        className="p-4 rounded-xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#131720]"
+                        className="p-4 rounded-xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#11141c]"
                       >
-                        <span className="inline-block text-[11px] font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-2">
+                        <span className="inline-block text-[11px] font-mono font-medium text-[#6b7487] dark:text-[#7a8296] uppercase tracking-wider mb-2">
                           Secondary Track
                         </span>
                         <div className="flex items-center gap-2.5">
-                          <FieldIcon fieldId={field.id} className="h-5 w-5 text-neutral-600 dark:text-neutral-400" />
-                          <h3 className="font-semibold text-base">{field.name}</h3>
+                          <FieldIcon fieldId={field.id} className="h-5 w-5 text-[#6b7487] dark:text-[#7a8296]" />
+                          <h3 className="font-medium text-base text-[#111827] dark:text-[#eef0f5]">{field.name}</h3>
                         </div>
-                        <p className="mt-2 text-xs text-neutral-500 dark:text-neutral-400 line-clamp-2">
+                        <p className="mt-2 text-xs text-[#6b7487] dark:text-[#7a8296] line-clamp-2">
                           {field.desc}
                         </p>
                       </div>
                     ))}
                 </div>
 
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-2.5 pt-4">
                   <button
                     type="button"
                     onClick={applyRecommendedTracks}
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg bg-[#0A66C2] hover:bg-[#084e96] text-white text-sm font-semibold shadow-sm transition-colors"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-[#0A66C2] hover:bg-[#004182] text-white text-xs font-medium transition-colors"
                   >
-                    Accept & Continue
-                    <ArrowRight className="h-4 w-4" />
+                    Accept tracks
+                    <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.5} />
                   </button>
                   <button
                     type="button"
                     onClick={() => setInInterestQuiz(false)}
-                    className="w-full sm:w-auto px-4 py-2.5 rounded-lg border border-black/[0.08] dark:border-white/[0.08] text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+                    className="w-full sm:w-auto px-4 py-2.5 rounded-lg border border-black/[0.08] dark:border-white/[0.08] text-xs font-medium text-[#4b5565] dark:text-[#a3a9b8] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] transition-colors"
                   >
-                    Select Manually
+                    Select manually
                   </button>
                 </div>
               </div>
@@ -507,16 +501,16 @@ export default function OnboardingQuiz({ onComplete, onSkip }) {
           /* ========================================================= */
           /* STANDARD 6-STEP ONBOARDING WIZARD                         */
           /* ========================================================= */
-          <div className="space-y-8 animate-fade-in">
+          <div className="space-y-8">
             {/* STEP 1: TRACK SELECTION */}
             {step === 1 && (
               <div className="space-y-6">
                 <div>
-                  <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
-                    Which track(s) do you want to master?
+                  <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#111827] dark:text-[#eef0f5]">
+                    Select career track
                   </h1>
-                  <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
-                    Select up to 2 tracks (Primary and optional Secondary). Your personalized curriculum will be built around your primary focus.
+                  <p className="mt-1.5 text-xs sm:text-sm text-[#4b5565] dark:text-[#a3a9b8]">
+                    Choose up to 2 tracks (Primary and optional Secondary). Your personalized roadmap is calibrated around your primary track.
                   </p>
                 </div>
 
@@ -530,43 +524,45 @@ export default function OnboardingQuiz({ onComplete, onSkip }) {
                         key={field.id}
                         type="button"
                         onClick={() => toggleTrack(field.id)}
-                        className={`relative p-4 rounded-xl border text-left transition-all focus:outline-none focus:ring-2 focus:ring-[#0A66C2] ${isPrimary
-                            ? 'border-[#0A66C2] bg-blue-500/[0.06] dark:bg-blue-500/[0.12] ring-1 ring-[#0A66C2]'
+                        className={`relative p-4 rounded-xl border text-left transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A66C2] ${
+                          isPrimary
+                            ? 'border-[#0A66C2] bg-black/[0.02] dark:bg-[#1a1e28]'
                             : isSecondary
-                              ? 'border-neutral-400 dark:border-neutral-600 bg-neutral-100/70 dark:bg-[#1a1f2b]'
-                              : 'border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#131720] hover:border-black/20 dark:hover:border-white/20'
-                          }`}
+                            ? 'border-black/20 dark:border-white/20 bg-black/[0.01] dark:bg-[#141822]'
+                            : 'border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#11141c] hover:border-black/20 dark:hover:border-white/20'
+                        }`}
                       >
                         <div className="flex items-start justify-between">
-                          <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-2.5">
                             <div
-                              className={`p-2 rounded-lg ${isPrimary
+                              className={`p-2 rounded-lg ${
+                                isPrimary
                                   ? 'bg-[#0A66C2] text-white'
                                   : isSecondary
-                                    ? 'bg-neutral-200 dark:bg-neutral-700 text-neutral-900 dark:text-neutral-100'
-                                    : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400'
-                                }`}
+                                  ? 'bg-black/[0.06] dark:bg-[#1a1e28] text-[#111827] dark:text-[#eef0f5]'
+                                  : 'bg-black/[0.04] dark:bg-[#1a1e28] text-[#6b7487] dark:text-[#7a8296]'
+                              }`}
                             >
-                              <FieldIcon fieldId={field.id} className="h-5 w-5" />
+                              <FieldIcon fieldId={field.id} className="h-4.5 w-4.5" />
                             </div>
-                            <span className="font-semibold text-sm text-neutral-900 dark:text-neutral-100">
+                            <span className="font-medium text-sm text-[#111827] dark:text-[#eef0f5]">
                               {field.name}
                             </span>
                           </div>
 
                           {isPrimary && (
-                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#0A66C2] text-white tracking-wide uppercase">
+                            <span className="text-[10px] font-mono font-medium px-1.5 py-0.5 rounded-md bg-[#0A66C2] text-white uppercase tracking-wider">
                               Primary
                             </span>
                           )}
                           {isSecondary && (
-                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-neutral-200 dark:bg-neutral-700 text-neutral-700 dark:text-neutral-300 tracking-wide uppercase">
+                            <span className="text-[10px] font-mono font-medium px-1.5 py-0.5 rounded-md bg-black/[0.06] dark:bg-[#1a1e28] text-[#4b5565] dark:text-[#a3a9b8] uppercase tracking-wider">
                               Secondary
                             </span>
                           )}
                         </div>
 
-                        <p className="mt-3 text-xs text-neutral-500 dark:text-neutral-400 line-clamp-2">
+                        <p className="mt-3 text-xs text-[#4b5565] dark:text-[#a3a9b8] line-clamp-2 leading-relaxed">
                           {field.desc}
                         </p>
                       </button>
@@ -575,15 +571,15 @@ export default function OnboardingQuiz({ onComplete, onSkip }) {
                 </div>
 
                 {/* "Not sure" trigger */}
-                <div className="p-4 rounded-xl border border-dashed border-black/15 dark:border-white/15 bg-white/50 dark:bg-[#131720]/50 flex flex-col sm:flex-row items-center justify-between gap-3">
+                <div className="p-4 rounded-xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#11141c] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-sm">
                   <div className="flex items-center gap-3">
-                    <HelpCircle className="h-5 w-5 text-neutral-500 flex-shrink-0" />
+                    <HelpCircle className="h-4 w-4 text-[#6b7487] dark:text-[#7a8296] flex-shrink-0" strokeWidth={1.5} />
                     <div>
-                      <p className="text-sm font-medium text-neutral-800 dark:text-neutral-200">
-                        Not sure which discipline fits your goals?
+                      <p className="text-xs font-semibold text-[#111827] dark:text-[#eef0f5]">
+                        Not sure which track fits your career goals?
                       </p>
-                      <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                        Take our rapid 4-question interest quiz to get instant recommendations.
+                      <p className="text-[11px] text-[#6b7487] dark:text-[#7a8296]">
+                        Answer 4 quick problem-solving questions to calculate your optimal match.
                       </p>
                     </div>
                   </div>
@@ -595,9 +591,9 @@ export default function OnboardingQuiz({ onComplete, onSkip }) {
                       setInterestScores({})
                       setRecommendedTracks(null)
                     }}
-                    className="flex-shrink-0 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg border border-black/[0.08] dark:border-white/[0.08] hover:bg-neutral-100 dark:hover:bg-neutral-800 text-xs font-semibold text-neutral-800 dark:text-neutral-200 transition-colors"
+                    className="flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-black/[0.08] dark:border-white/[0.08] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] text-xs font-medium text-[#111827] dark:text-[#eef0f5] transition-colors"
                   >
-                    <Sparkles className="h-3.5 w-3.5 text-[#0A66C2]" />
+                    <Compass className="h-3.5 w-3.5 text-[#0A66C2]" strokeWidth={1.5} />
                     Help me choose
                   </button>
                 </div>
@@ -608,15 +604,15 @@ export default function OnboardingQuiz({ onComplete, onSkip }) {
             {step === 2 && (
               <div className="space-y-6">
                 <div>
-                  <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
-                    What is your experience level in {FIELDS.find((f) => f.id === answers.primaryFieldId)?.name}?
+                  <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#111827] dark:text-[#eef0f5]">
+                    Current experience in {FIELDS.find((f) => f.id === answers.primaryFieldId)?.name}
                   </h1>
-                  <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
-                    Be honest — this helps us calibrate your starting point and skip foundations you have already mastered.
+                  <p className="mt-1.5 text-xs sm:text-sm text-[#4b5565] dark:text-[#a3a9b8]">
+                    This calibrates your roadmap starting point and tests out of foundations you already know.
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 gap-3">
+                <div className="grid grid-cols-1 gap-2.5">
                   {[
                     {
                       id: 'beginner',
@@ -649,29 +645,31 @@ export default function OnboardingQuiz({ onComplete, onSkip }) {
                         key={lvl.id}
                         type="button"
                         onClick={() => setAnswers((prev) => ({ ...prev, level: lvl.id }))}
-                        className={`group p-4 sm:p-5 rounded-xl border text-left transition-all flex items-start gap-4 focus:outline-none focus:ring-2 focus:ring-[#0A66C2] ${isSelected
-                            ? 'border-[#0A66C2] bg-blue-500/[0.06] dark:bg-blue-500/[0.12] ring-1 ring-[#0A66C2]'
-                            : 'border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#131720] hover:border-black/20 dark:hover:border-white/20'
-                          }`}
+                        className={`group p-4 sm:p-5 rounded-xl border text-left transition-colors duration-150 flex items-start gap-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A66C2] ${
+                          isSelected
+                            ? 'border-[#0A66C2] bg-black/[0.02] dark:bg-[#1a1e28]'
+                            : 'border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#11141c] hover:border-black/20 dark:hover:border-white/20'
+                        }`}
                       >
                         <div
-                          className={`flex-shrink-0 flex items-center justify-center h-6 w-6 rounded-md text-xs font-semibold ${isSelected
+                          className={`flex-shrink-0 flex items-center justify-center h-6 w-6 rounded-md font-mono text-xs font-medium transition-colors ${
+                            isSelected
                               ? 'bg-[#0A66C2] text-white'
-                              : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400'
-                            }`}
+                              : 'bg-black/[0.04] dark:bg-[#1a1e28] text-[#6b7487] dark:text-[#7a8296]'
+                          }`}
                         >
                           {idx + 1}
                         </div>
                         <div className="flex-1">
-                          <div className="flex items-center justify-between">
-                            <span className="font-semibold text-base text-neutral-900 dark:text-neutral-100">
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="font-medium text-base text-[#111827] dark:text-[#eef0f5]">
                               {lvl.title}
                             </span>
-                            <span className="text-[11px] font-medium text-neutral-500 dark:text-neutral-400">
+                            <span className="text-[11px] font-mono text-[#6b7487] dark:text-[#7a8296]">
                               {lvl.badge}
                             </span>
                           </div>
-                          <p className="mt-1 text-xs sm:text-sm text-neutral-500 dark:text-neutral-400">
+                          <p className="mt-1 text-xs text-[#4b5565] dark:text-[#a3a9b8] leading-relaxed">
                             {lvl.desc}
                           </p>
                         </div>
@@ -687,10 +685,10 @@ export default function OnboardingQuiz({ onComplete, onSkip }) {
               <div className="space-y-6">
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-semibold uppercase tracking-wider text-[#0A66C2]">
+                    <span className="text-xs font-mono font-medium text-[#0A66C2] uppercase tracking-wider">
                       Quick Skill Check
                     </span>
-                    <span className="text-xs font-medium text-neutral-500 dark:text-neutral-400">
+                    <span className="text-xs font-mono text-[#6b7487] dark:text-[#7a8296] tabular-nums">
                       Question {skillQuestionIdx + 1} of {currentSkillQuestions.length}
                     </span>
                   </div>
@@ -698,25 +696,25 @@ export default function OnboardingQuiz({ onComplete, onSkip }) {
                   {currentSkillQuestions[skillQuestionIdx] && (
                     <>
                       <div className="flex items-center gap-2 mb-2">
-                        <span className="text-xs font-medium px-2 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400">
+                        <span className="text-xs font-mono px-2 py-0.5 rounded-md bg-black/[0.04] dark:bg-[#1a1e28] text-[#4b5565] dark:text-[#a3a9b8] border border-black/[0.04] dark:border-white/[0.04]">
                           {currentSkillQuestions[skillQuestionIdx].concept}
                         </span>
-                        <span className="text-[11px] font-medium px-2 py-0.5 rounded bg-blue-500/10 text-[#0A66C2] capitalize">
+                        <span className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-[#0A66C2]/10 text-[#0A66C2] capitalize border border-[#0A66C2]/20">
                           {currentSkillQuestions[skillQuestionIdx].difficulty}
                         </span>
                       </div>
-                      <h2 className="text-lg sm:text-xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
+                      <h2 className="text-lg sm:text-xl font-semibold tracking-tight text-[#111827] dark:text-[#eef0f5]">
                         {currentSkillQuestions[skillQuestionIdx].question}
                       </h2>
                     </>
                   )}
-                  <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
-                    Use numbers 1–4 to pick, or select your answer below.
+                  <p className="mt-1.5 text-xs font-mono text-[#6b7487] dark:text-[#7a8296]">
+                    Press 1–4 on your keyboard or select your answer below.
                   </p>
                 </div>
 
                 {currentSkillQuestions[skillQuestionIdx] && (
-                  <div className="grid grid-cols-1 gap-3">
+                  <div className="grid grid-cols-1 gap-2.5">
                     {currentSkillQuestions[skillQuestionIdx].options.map((optionText, optIdx) => {
                       const currentQId = currentSkillQuestions[skillQuestionIdx].id
                       const isChosen = answers.skillAnswers[currentQId] === optIdx
@@ -726,20 +724,22 @@ export default function OnboardingQuiz({ onComplete, onSkip }) {
                           key={optIdx}
                           type="button"
                           onClick={() => selectSkillAnswer(currentQId, optIdx)}
-                          className={`group flex items-start gap-4 p-4 rounded-xl border text-left transition-all focus:outline-none focus:ring-2 focus:ring-[#0A66C2] ${isChosen
-                              ? 'border-[#0A66C2] bg-blue-500/[0.06] dark:bg-blue-500/[0.12] ring-1 ring-[#0A66C2]'
-                              : 'border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#131720] hover:border-black/20 dark:hover:border-white/20'
-                            }`}
+                          className={`group flex items-start gap-3.5 p-4 rounded-xl border text-left transition-colors duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A66C2] ${
+                            isChosen
+                              ? 'border-[#0A66C2] bg-black/[0.02] dark:bg-[#1a1e28]'
+                              : 'border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#11141c] hover:border-black/20 dark:hover:border-white/20'
+                          }`}
                         >
                           <span
-                            className={`flex-shrink-0 flex items-center justify-center h-6 w-6 rounded-md text-xs font-semibold ${isChosen
+                            className={`flex-shrink-0 flex items-center justify-center h-6 w-6 rounded-md font-mono text-xs font-medium transition-colors ${
+                              isChosen
                                 ? 'bg-[#0A66C2] text-white'
-                                : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 group-hover:bg-[#0A66C2] group-hover:text-white transition-colors'
-                              }`}
+                                : 'bg-black/[0.04] dark:bg-[#1a1e28] text-[#6b7487] dark:text-[#7a8296] group-hover:bg-[#0A66C2] group-hover:text-white'
+                            }`}
                           >
                             {optIdx + 1}
                           </span>
-                          <span className="text-sm font-medium text-neutral-800 dark:text-neutral-200 group-hover:text-neutral-900 dark:group-hover:text-white">
+                          <span className="text-sm font-medium text-[#111827] dark:text-[#eef0f5] leading-relaxed">
                             {optionText}
                           </span>
                         </button>
@@ -754,18 +754,18 @@ export default function OnboardingQuiz({ onComplete, onSkip }) {
             {step === 4 && (
               <div className="space-y-8">
                 <div>
-                  <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
-                    How much time can you dedicate?
+                  <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#111827] dark:text-[#eef0f5]">
+                    Time dedication
                   </h1>
-                  <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
-                    We calculate your exact calendar milestones and completion dates from these parameters.
+                  <p className="mt-1.5 text-xs sm:text-sm text-[#4b5565] dark:text-[#a3a9b8]">
+                    We calculate exact calendar milestones and target completion dates from these parameters.
                   </p>
                 </div>
 
                 {/* Sub-section: Weekly Hours */}
                 <div className="space-y-3">
-                  <label className="block text-xs font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
-                    Weekly Commitment
+                  <label className="block text-xs font-mono font-medium uppercase tracking-wider text-[#6b7487] dark:text-[#7a8296]">
+                    Weekly commitment
                   </label>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {[
@@ -780,20 +780,21 @@ export default function OnboardingQuiz({ onComplete, onSkip }) {
                           key={item.id}
                           type="button"
                           onClick={() => setAnswers((prev) => ({ ...prev, hoursPerWeek: item.id }))}
-                          className={`p-4 rounded-xl border text-left transition-all flex items-center justify-between ${isSelected
-                              ? 'border-[#0A66C2] bg-blue-500/[0.06] dark:bg-blue-500/[0.12] ring-1 ring-[#0A66C2]'
-                              : 'border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#131720] hover:border-black/20 dark:hover:border-white/20'
-                            }`}
+                          className={`p-4 rounded-xl border text-left transition-colors duration-150 flex items-center justify-between ${
+                            isSelected
+                              ? 'border-[#0A66C2] bg-black/[0.02] dark:bg-[#1a1e28]'
+                              : 'border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#11141c] hover:border-black/20 dark:hover:border-white/20'
+                          }`}
                         >
                           <div>
-                            <span className="font-semibold text-sm text-neutral-900 dark:text-neutral-100 block">
+                            <span className="font-medium text-sm text-[#111827] dark:text-[#eef0f5] block">
                               {item.label}
                             </span>
-                            <span className="text-xs text-neutral-500 dark:text-neutral-400">
+                            <span className="text-xs text-[#6b7487] dark:text-[#7a8296]">
                               {item.desc}
                             </span>
                           </div>
-                          <Clock className={`h-4 w-4 ${isSelected ? 'text-[#0A66C2]' : 'text-neutral-400'}`} />
+                          <Clock className={`h-4 w-4 ${isSelected ? 'text-[#0A66C2]' : 'text-[#6b7487] dark:text-[#7a8296]'}`} strokeWidth={1.5} />
                         </button>
                       )
                     })}
@@ -802,13 +803,13 @@ export default function OnboardingQuiz({ onComplete, onSkip }) {
 
                 {/* Sub-section: Target Timeframe */}
                 <div className="space-y-3">
-                  <label className="block text-xs font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
-                    Target Completion Horizon
+                  <label className="block text-xs font-mono font-medium uppercase tracking-wider text-[#6b7487] dark:text-[#7a8296]">
+                    Target completion horizon
                   </label>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                     {[
                       { id: '3m', label: '3 months', sub: 'Aggressive' },
-                      { id: '6m', label: '6 months', sub: 'Recommended' },
+                      { id: '6m', label: '6 months', sub: 'Balanced' },
                       { id: '12m', label: '12 months', sub: 'Comprehensive' },
                       { id: 'flexible', label: 'Flexible', sub: 'Self-paced' },
                     ].map((item) => {
@@ -818,15 +819,16 @@ export default function OnboardingQuiz({ onComplete, onSkip }) {
                           key={item.id}
                           type="button"
                           onClick={() => setAnswers((prev) => ({ ...prev, targetTimeframe: item.id }))}
-                          className={`p-4 rounded-xl border text-center transition-all ${isSelected
-                              ? 'border-[#0A66C2] bg-blue-500/[0.06] dark:bg-blue-500/[0.12] ring-1 ring-[#0A66C2]'
-                              : 'border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#131720] hover:border-black/20 dark:hover:border-white/20'
-                            }`}
+                          className={`p-4 rounded-xl border text-center transition-colors duration-150 ${
+                            isSelected
+                              ? 'border-[#0A66C2] bg-black/[0.02] dark:bg-[#1a1e28]'
+                              : 'border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#11141c] hover:border-black/20 dark:hover:border-white/20'
+                          }`}
                         >
-                          <span className="font-semibold text-sm text-neutral-900 dark:text-neutral-100 block">
+                          <span className="font-medium text-sm text-[#111827] dark:text-[#eef0f5] block">
                             {item.label}
                           </span>
-                          <span className="text-xs text-neutral-500 dark:text-neutral-400">
+                          <span className="text-xs font-mono text-[#6b7487] dark:text-[#7a8296]">
                             {item.sub}
                           </span>
                         </button>
@@ -841,33 +843,33 @@ export default function OnboardingQuiz({ onComplete, onSkip }) {
             {step === 5 && (
               <div className="space-y-6">
                 <div>
-                  <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
-                    How do you absorb technical material best?
+                  <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#111827] dark:text-[#eef0f5]">
+                    Learning format preference
                   </h1>
-                  <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
-                    We sort and prioritize documentation, interactive sandboxes, and video deep-dives based on your preference.
+                  <p className="mt-1.5 text-xs sm:text-sm text-[#4b5565] dark:text-[#a3a9b8]">
+                    We sort documentation, interactive specs, and video deep-dives based on your preference.
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 gap-3">
+                <div className="grid grid-cols-1 gap-2.5">
                   {[
                     {
                       id: 'videos',
                       icon: Video,
                       title: 'Video-First Learner',
-                      desc: 'Prefer curated video lectures, visual walkthroughs, and YouTube deep-dives sorted to the top of each phase.',
+                      desc: 'Curated video lectures, visual walkthroughs, and YouTube deep-dives sorted to the top of each phase.',
                     },
                     {
                       id: 'docs',
                       icon: BookOpen,
                       title: 'Documentation & Reading',
-                      desc: 'Prefer official specs, interactive tutorials, architecture docs, and technical articles prioritized first.',
+                      desc: 'Official specifications, interactive sandboxes, architecture docs, and technical articles prioritized first.',
                     },
                     {
                       id: 'mixed',
                       icon: Layers,
                       title: 'Balanced / Mixed',
-                      desc: 'A healthy equilibrium between visual tutorials and foundational documentation as originally authored.',
+                      desc: 'Equilibrium between video tutorials and technical documentation as originally authored.',
                     },
                   ].map((style, idx) => {
                     const isSelected = answers.learningStyle === style.id
@@ -877,24 +879,26 @@ export default function OnboardingQuiz({ onComplete, onSkip }) {
                         key={style.id}
                         type="button"
                         onClick={() => setAnswers((prev) => ({ ...prev, learningStyle: style.id }))}
-                        className={`group p-4 sm:p-5 rounded-xl border text-left transition-all flex items-start gap-4 focus:outline-none focus:ring-2 focus:ring-[#0A66C2] ${isSelected
-                            ? 'border-[#0A66C2] bg-blue-500/[0.06] dark:bg-blue-500/[0.12] ring-1 ring-[#0A66C2]'
-                            : 'border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#131720] hover:border-black/20 dark:hover:border-white/20'
-                          }`}
+                        className={`group p-4 sm:p-5 rounded-xl border text-left transition-colors duration-150 flex items-start gap-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A66C2] ${
+                          isSelected
+                            ? 'border-[#0A66C2] bg-black/[0.02] dark:bg-[#1a1e28]'
+                            : 'border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#11141c] hover:border-black/20 dark:hover:border-white/20'
+                        }`}
                       >
                         <div
-                          className={`flex-shrink-0 p-2.5 rounded-lg ${isSelected
+                          className={`flex-shrink-0 p-2.5 rounded-lg ${
+                            isSelected
                               ? 'bg-[#0A66C2] text-white'
-                              : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400'
-                            }`}
+                              : 'bg-black/[0.04] dark:bg-[#1a1e28] text-[#6b7487] dark:text-[#7a8296]'
+                          }`}
                         >
-                          <IconComp className="h-5 w-5" />
+                          <IconComp className="h-5 w-5" strokeWidth={1.5} />
                         </div>
                         <div className="flex-1">
-                          <span className="font-semibold text-base text-neutral-900 dark:text-neutral-100 block">
+                          <span className="font-medium text-base text-[#111827] dark:text-[#eef0f5] block">
                             {idx + 1}. {style.title}
                           </span>
-                          <p className="mt-1 text-xs sm:text-sm text-neutral-500 dark:text-neutral-400">
+                          <p className="mt-1 text-xs text-[#4b5565] dark:text-[#a3a9b8] leading-relaxed">
                             {style.desc}
                           </p>
                         </div>
@@ -909,15 +913,15 @@ export default function OnboardingQuiz({ onComplete, onSkip }) {
             {step === 6 && (
               <div className="space-y-6">
                 <div>
-                  <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-100">
-                    What is your primary motivation?
+                  <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-[#111827] dark:text-[#eef0f5]">
+                    Primary objective
                   </h1>
-                  <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
+                  <p className="mt-1.5 text-xs sm:text-sm text-[#4b5565] dark:text-[#a3a9b8]">
                     This personalizes study tips, interview preparation milestones, and project emphasis across your path.
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                   {[
                     {
                       id: 'career',
@@ -945,8 +949,8 @@ export default function OnboardingQuiz({ onComplete, onSkip }) {
                     },
                     {
                       id: 'curiosity',
-                      icon: Sparkles,
-                      title: 'Curiosity & Fun',
+                      icon: Compass,
+                      title: 'Curiosity & Exploration',
                       desc: 'Tinkering with cutting-edge tools at your own leisure.',
                     },
                   ].map((mot, idx) => {
@@ -957,24 +961,26 @@ export default function OnboardingQuiz({ onComplete, onSkip }) {
                         key={mot.id}
                         type="button"
                         onClick={() => setAnswers((prev) => ({ ...prev, motivation: mot.id }))}
-                        className={`group p-4 rounded-xl border text-left transition-all flex items-start gap-3.5 focus:outline-none focus:ring-2 focus:ring-[#0A66C2] ${isSelected
-                            ? 'border-[#0A66C2] bg-blue-500/[0.06] dark:bg-blue-500/[0.12] ring-1 ring-[#0A66C2]'
-                            : 'border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#131720] hover:border-black/20 dark:hover:border-white/20'
-                          }`}
+                        className={`group p-4 rounded-xl border text-left transition-colors duration-150 flex items-start gap-3.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0A66C2] ${
+                          isSelected
+                            ? 'border-[#0A66C2] bg-black/[0.02] dark:bg-[#1a1e28]'
+                            : 'border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#11141c] hover:border-black/20 dark:hover:border-white/20'
+                        }`}
                       >
                         <div
-                          className={`flex-shrink-0 p-2 rounded-lg ${isSelected
+                          className={`flex-shrink-0 p-2 rounded-lg ${
+                            isSelected
                               ? 'bg-[#0A66C2] text-white'
-                              : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400'
-                            }`}
+                              : 'bg-black/[0.04] dark:bg-[#1a1e28] text-[#6b7487] dark:text-[#7a8296]'
+                          }`}
                         >
-                          <IconComp className="h-4 w-4" />
+                          <IconComp className="h-4 w-4" strokeWidth={1.5} />
                         </div>
                         <div>
-                          <span className="font-semibold text-sm text-neutral-900 dark:text-neutral-100 block">
+                          <span className="font-medium text-sm text-[#111827] dark:text-[#eef0f5] block">
                             {idx + 1}. {mot.title}
                           </span>
-                          <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                          <p className="mt-1 text-xs text-[#4b5565] dark:text-[#a3a9b8]">
                             {mot.desc}
                           </p>
                         </div>
@@ -986,40 +992,40 @@ export default function OnboardingQuiz({ onComplete, onSkip }) {
             )}
 
             {/* Bottom Stepper Actions */}
-            <div className="pt-8 border-t border-black/[0.08] dark:border-white/[0.08] flex items-center justify-between">
+            <div className="pt-6 border-t border-black/[0.08] dark:border-white/[0.08] flex items-center justify-between">
               <button
                 type="button"
                 onClick={handleBack}
                 disabled={step === 1}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-black/[0.08] dark:border-white/[0.08] text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg border border-black/[0.08] dark:border-white/[0.08] text-xs font-medium text-[#4b5565] dark:text-[#a3a9b8] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
               >
-                <ArrowLeft className="h-4 w-4" />
+                <ArrowLeft className="h-3.5 w-3.5" strokeWidth={1.5} />
                 Back
               </button>
 
               <div className="flex items-center gap-3">
-                <span className="text-xs text-neutral-400 hidden sm:inline">
+                <span className="text-xs font-mono text-[#6b7487] dark:text-[#7a8296] hidden sm:inline">
                   Press Enter ↵
                 </span>
                 <button
                   type="button"
                   onClick={handleNext}
-                  className="inline-flex items-center gap-2 px-6 py-2 rounded-lg bg-[#0A66C2] hover:bg-[#084e96] text-white text-sm font-semibold shadow-sm transition-colors"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#0A66C2] hover:bg-[#004182] text-white text-xs font-medium shadow-sm transition-colors"
                 >
                   {step === 6 ? (
                     <>
-                      <Sparkles className="h-4 w-4" />
-                      Forge My Path
+                      Create personalized path
+                      <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.5} />
                     </>
                   ) : step === 3 && skillQuestionIdx < currentSkillQuestions.length - 1 ? (
                     <>
-                      Next Question
-                      <ArrowRight className="h-4 w-4" />
+                      Next question
+                      <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.5} />
                     </>
                   ) : (
                     <>
-                      Next Step
-                      <ArrowRight className="h-4 w-4" />
+                      Next step
+                      <ArrowRight className="h-3.5 w-3.5" strokeWidth={1.5} />
                     </>
                   )}
                 </button>
