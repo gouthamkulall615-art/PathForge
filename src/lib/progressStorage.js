@@ -1,6 +1,9 @@
 const BASE_KEY = 'pathforge:progress:v1'
 const GUEST_KEY = `${BASE_KEY}:guest`
 
+const BASE_PROFILE_KEY = 'pathforge:profile:v1'
+const GUEST_PROFILE_KEY = `${BASE_PROFILE_KEY}:guest`
+
 const DEFAULT_STATE = {
   completedTopicIds: [],
   lastVisitedFieldId: null,
@@ -182,3 +185,131 @@ export async function mergeGuestProgressIntoUser(userId) {
     return { merged: false, totalCompleted: 0 }
   }
 }
+
+/**
+ * Returns the localStorage key for a user's quiz profile.
+ * @param {string|null} [userId]
+ * @returns {string}
+ */
+function resolveProfileKey(userId) {
+  const targetId = userId !== undefined ? userId : currentActiveUserId
+  if (targetId && targetId !== 'guest') {
+    return `${BASE_PROFILE_KEY}:${targetId}`
+  }
+  return GUEST_PROFILE_KEY
+}
+
+/**
+ * Loads the user's quiz profile and personalized roadmap.
+ *
+ * TODO (Express + MongoDB Backend):
+ * In a future update, swap this localStorage read for an authorized API call:
+ * const response = await fetch('/api/profile', {
+ *   headers: { Authorization: `Bearer ${authToken}` }
+ * })
+ * return await response.json()
+ *
+ * @param {string|null} [userId]
+ * @returns {Promise<{ answers: Object, generatedRoadmap: Object, completedAt: string, version: number }|null>}
+ */
+export async function loadProfile(userId) {
+  try {
+    if (typeof window === 'undefined' || !window.localStorage) {
+      return null
+    }
+
+    const key = resolveProfileKey(userId)
+    const raw = window.localStorage.getItem(key)
+    if (!raw) return null
+
+    const parsed = JSON.parse(raw)
+    if (!parsed || typeof parsed !== 'object' || !parsed.answers || !parsed.generatedRoadmap) {
+      return null
+    }
+
+    return parsed
+  } catch (err) {
+    console.warn('[progressStorage] Failed to load profile from localStorage:', err)
+    return null
+  }
+}
+
+/**
+ * Saves the user's quiz profile and personalized roadmap.
+ *
+ * TODO (Express + MongoDB Backend):
+ * In a future update, swap this localStorage write for an authorized API call:
+ * await fetch('/api/profile', {
+ *   method: 'PUT',
+ *   headers: {
+ *     'Content-Type': 'application/json',
+ *     Authorization: `Bearer ${authToken}`
+ *   },
+ *   body: JSON.stringify(profileData)
+ * })
+ *
+ * @param {{ answers: Object, generatedRoadmap: Object }} profileData
+ * @param {string|null} [userId]
+ * @returns {Promise<void>}
+ */
+export async function saveProfile(profileData, userId) {
+  try {
+    if (typeof window === 'undefined' || !window.localStorage) {
+      return
+    }
+
+    const key = resolveProfileKey(userId)
+    const payload = {
+      answers: profileData?.answers || {},
+      generatedRoadmap: profileData?.generatedRoadmap || null,
+      completedAt: profileData?.completedAt || new Date().toISOString(),
+      version: 1,
+    }
+
+    window.localStorage.setItem(key, JSON.stringify(payload))
+  } catch (err) {
+    console.warn('[progressStorage] Failed to save profile to localStorage:', err)
+  }
+}
+
+/**
+ * Clears the user's profile from storage (used when resetting or retaking).
+ * @param {string|null} [userId]
+ * @returns {Promise<void>}
+ */
+export async function clearProfile(userId) {
+  try {
+    if (typeof window === 'undefined' || !window.localStorage) return
+    const key = resolveProfileKey(userId)
+    window.localStorage.removeItem(key)
+  } catch (err) {
+    console.warn('[progressStorage] Failed to clear profile from localStorage:', err)
+  }
+}
+
+/**
+ * Adopts a guest quiz profile upon initial sign-in if the user does not yet have one.
+ * @param {string} userId
+ * @returns {Promise<boolean>} whether a guest profile was adopted
+ */
+export async function adoptGuestProfile(userId) {
+  if (!userId) return false
+  try {
+    const existingUserProfile = await loadProfile(userId)
+    if (existingUserProfile) {
+      return false // User already has their own saved profile
+    }
+
+    const guestProfile = await loadProfile('guest')
+    if (guestProfile) {
+      await saveProfile(guestProfile, userId)
+      return true
+    }
+
+    return false
+  } catch (err) {
+    console.warn('[progressStorage] Failed to adopt guest profile:', err)
+    return false
+  }
+}
+

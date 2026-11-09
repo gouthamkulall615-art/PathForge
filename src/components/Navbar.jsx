@@ -1,13 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
 import { useTheme } from '../contexts/ThemeContext'
 import { useAuth } from '../contexts/AuthContext'
-import { Sun, Moon, Menu, X, Route, LogIn, LogOut } from 'lucide-react'
+import { useProfile } from '../contexts/ProfileContext'
+import { Sun, Moon, Menu, X, Route, LogIn, LogOut, Sparkles, RotateCcw } from 'lucide-react'
 import AuthModal from './AuthModal'
-
-const NAV_LINKS = [
-  { label: 'Roadmaps', id: 'roadmaps' },
-  { label: 'About', id: 'about' },
-]
 
 function getInitials(name) {
   if (!name) return 'U'
@@ -19,12 +15,20 @@ function getInitials(name) {
 export default function Navbar({ activeSection, onNavigate }) {
   const { theme, toggleTheme } = useTheme()
   const { user, logout, isGoogleConfigured } = useAuth()
+  const { hasProfile } = useProfile()
 
   const [mobileOpen, setMobileOpen] = useState(false)
   const [authModalOpen, setAuthModalOpen] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const [failedAvatarUrl, setFailedAvatarUrl] = useState(null)
   const userMenuRef = useRef(null)
+
+  // Dynamic navigation links based on personalized profile presence
+  const navLinks = [
+    ...(hasProfile ? [{ label: 'My Path', id: 'mypath' }] : []),
+    { label: 'Roadmaps', id: 'roadmaps' },
+    { label: 'About', id: 'about' },
+  ]
 
   // Declarative avatar fallback check without synchronous effect setState
   const isAvatarValid = Boolean(user?.picture && failedAvatarUrl !== user.picture)
@@ -110,7 +114,7 @@ export default function Navbar({ activeSection, onNavigate }) {
 
             {/* Center: Desktop links */}
             <nav className="hidden md:flex items-center gap-1">
-              {NAV_LINKS.map((link) => {
+              {navLinks.map((link) => {
                 const isActive = activeSection === link.id
                 return (
                   <button
@@ -168,6 +172,34 @@ export default function Navbar({ activeSection, onNavigate }) {
                           {user.email}
                         </p>
                       </div>
+
+                      <div className="h-px bg-black/[0.06] dark:bg-white/[0.06] my-1" />
+
+                      {hasProfile && (
+                        <button
+                          onClick={() => {
+                            setUserMenuOpen(false)
+                            onNavigate?.('mypath')
+                          }}
+                          role="menuitem"
+                          className="w-full flex items-center gap-2 px-2.5 py-1.5 text-xs text-[#4b5565] dark:text-[#a3a9b8] hover:text-[#111827] dark:hover:text-[#eef0f5] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] rounded-lg transition-colors text-left"
+                        >
+                          <Sparkles className="h-3.5 w-3.5 text-[#0A66C2]" strokeWidth={1.5} />
+                          <span>My Personalized Path</span>
+                        </button>
+                      )}
+
+                      <button
+                        onClick={() => {
+                          setUserMenuOpen(false)
+                          onNavigate?.('quiz')
+                        }}
+                        role="menuitem"
+                        className="w-full flex items-center gap-2 px-2.5 py-1.5 text-xs text-[#4b5565] dark:text-[#a3a9b8] hover:text-[#111827] dark:hover:text-[#eef0f5] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] rounded-lg transition-colors text-left"
+                      >
+                        <RotateCcw className="h-3.5 w-3.5 text-neutral-500" strokeWidth={1.5} />
+                        <span>Retake assessment</span>
+                      </button>
 
                       <div className="h-px bg-black/[0.06] dark:bg-white/[0.06] my-1" />
 
@@ -246,7 +278,7 @@ export default function Navbar({ activeSection, onNavigate }) {
 
             {/* Mobile Nav Links */}
             <nav className="flex-1 px-3 py-3 space-y-1">
-              {NAV_LINKS.map((link) => (
+              {navLinks.map((link) => (
                 <button
                   key={link.id}
                   onClick={() => {
@@ -261,6 +293,19 @@ export default function Navbar({ activeSection, onNavigate }) {
                   {link.label}
                 </button>
               ))}
+
+              {!hasProfile && (
+                <button
+                  onClick={() => {
+                    onNavigate?.('quiz')
+                    setMobileOpen(false)
+                  }}
+                  className="w-full text-left px-3 py-2 text-sm rounded-md transition-colors text-[#0A66C2] font-medium flex items-center gap-2"
+                >
+                  <Sparkles className="h-3.5 w-3.5" />
+                  <span>Start Assessment</span>
+                </button>
+              )}
             </nav>
 
             {/* Mobile Auth & Theme section */}
@@ -290,6 +335,17 @@ export default function Navbar({ activeSection, onNavigate }) {
                       </p>
                     </div>
                   </div>
+
+                  <button
+                    onClick={() => {
+                      setMobileOpen(false)
+                      onNavigate?.('quiz')
+                    }}
+                    className="w-full flex items-center justify-center gap-1.5 py-1.5 text-xs text-[#4b5565] dark:text-[#a3a9b8] hover:bg-black/[0.04] dark:hover:bg-white/[0.06] rounded-md transition-colors"
+                  >
+                    <RotateCcw className="h-3.5 w-3.5" strokeWidth={1.5} />
+                    <span>Retake assessment</span>
+                  </button>
 
                   <button
                     onClick={() => {

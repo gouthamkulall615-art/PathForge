@@ -1,16 +1,19 @@
 import { useState, useRef, useMemo, useEffect, useCallback } from 'react'
 import { ThemeProvider } from './contexts/ThemeContext'
-import { AuthProvider } from './contexts/AuthContext'
+import { AuthProvider, useAuth } from './contexts/AuthContext'
 import { ProgressProvider, useProgress } from './contexts/ProgressContext'
+import { ProfileProvider, useProfile } from './contexts/ProfileContext'
 import Navbar from './components/Navbar'
 import HeroSection from './components/HeroSection'
 import FieldCard from './components/FieldCard'
 import RoadmapView from './components/RoadmapView'
 import SearchFilters from './components/SearchFilters'
 import FieldIcon from './components/FieldIcon'
+import OnboardingQuiz from './components/onboarding/OnboardingQuiz'
+import MyPath from './components/MyPath'
 import { searchAndFilterFields } from './lib/searchFields'
 import { FIELDS } from './data/fields'
-import { ArrowRight, RotateCcw } from 'lucide-react'
+import { ArrowRight, RotateCcw, Sparkles } from 'lucide-react'
 
 // Read initial filter values from URL query parameters
 function getInitialParams() {
@@ -34,11 +37,34 @@ function getInitialParams() {
 }
 
 function AppContent() {
+  const { user } = useAuth()
   const { getFieldProgress, lastVisitedFieldId } = useProgress()
+  const { hasProfile, isLoading: profileLoading, saveQuizAnswers } = useProfile()
 
   const [selectedField, setSelectedField] = useState(null)
   const [activeSection, setActiveSection] = useState('roadmaps')
   const gridRef = useRef(null)
+  const autoRedirectedRef = useRef(false)
+
+  // Automatic onboarding redirect:
+  // When a user signs in for the first time without a saved quiz profile,
+  // redirect them to the full-page onboarding quiz (unless skipped in this session).
+  useEffect(() => {
+    if (profileLoading) return
+    if (user?.id && !hasProfile && !autoRedirectedRef.current) {
+      autoRedirectedRef.current = true
+      const skipped =
+        typeof window !== 'undefined' &&
+        window.sessionStorage.getItem('pathforge:quiz_skipped') === 'true'
+      if (!skipped) {
+        const timer = setTimeout(() => {
+          setActiveSection('quiz')
+          setSelectedField(null)
+        }, 0)
+        return () => clearTimeout(timer)
+      }
+    }
+  }, [user?.id, hasProfile, profileLoading])
 
   // Filter and search states
   const initial = useMemo(() => getInitialParams(), [])
@@ -98,7 +124,15 @@ function AppContent() {
   const handleNavigate = (section) => {
     if (section === 'home') {
       setSelectedField(null)
-      setActiveSection('roadmaps')
+      setActiveSection(hasProfile ? 'mypath' : 'roadmaps')
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    } else if (section === 'mypath') {
+      setSelectedField(null)
+      setActiveSection('mypath')
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    } else if (section === 'quiz') {
+      setSelectedField(null)
+      setActiveSection('quiz')
       window.scrollTo({ top: 0, behavior: 'smooth' })
     } else if (section === 'roadmaps') {
       setSelectedField(null)
@@ -116,18 +150,54 @@ function AppContent() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  const handleQuizComplete = async (answers) => {
+    await saveQuizAnswers(answers)
+    setActiveSection('mypath')
+    setSelectedField(null)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const handleQuizSkip = () => {
+    try {
+      if (typeof window !== 'undefined' && window.sessionStorage) {
+        window.sessionStorage.setItem('pathforge:quiz_skipped', 'true')
+      }
+    } catch {
+      // Ignore
+    }
+    setActiveSection('roadmaps')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
   return (
     <div className="min-h-screen bg-[#f6f8fb] dark:bg-[#0b0d13] text-[#111827] dark:text-[#eef0f5] transition-colors duration-150">
       <Navbar activeSection={activeSection} onNavigate={handleNavigate} />
 
       <main className="px-4 sm:px-6 max-w-6xl mx-auto py-6 sm:py-8">
-        {selectedField ? (
+        {activeSection === 'quiz' ? (
+          <OnboardingQuiz
+            onComplete={handleQuizComplete}
+            onSkip={handleQuizSkip}
+          />
+        ) : selectedField ? (
           <RoadmapView
             field={selectedField}
             searchQuery={query}
             onBack={() => {
               setSelectedField(null)
-              setActiveSection('roadmaps')
+              setActiveSection(hasProfile ? 'mypath' : 'roadmaps')
+            }}
+          />
+        ) : activeSection === 'mypath' ? (
+          <MyPath
+            onRetakeQuiz={() => {
+              setSelectedField(null)
+              setActiveSection('quiz')
+              window.scrollTo({ top: 0, behavior: 'smooth' })
+            }}
+            onViewStandardRoadmap={(fieldId) => {
+              const field = FIELDS.find((f) => f.id === fieldId)
+              if (field) handleFieldClick(field)
             }}
           />
         ) : activeSection === 'about' ? (
@@ -143,6 +213,50 @@ function AppContent() {
 
             {/* Field Catalog Grid */}
             <div ref={gridRef} className="scroll-mt-20">
+              {/* Personalized Path CTA banner if user has no profile */}
+              {!hasProfile ? (
+                <div className="mb-6 p-4 rounded-xl bg-blue-500/[0.04] dark:bg-blue-500/[0.08] border border-[#0A66C2]/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-sm">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-[#0A66C2]/15 text-[#0A66C2] flex items-center justify-center flex-shrink-0">
+                      <Sparkles className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold text-[#111827] dark:text-[#eef0f5]">
+                        Looking for a personalized learning roadmap?
+                      </p>
+                      <p className="text-[11px] text-[#6b7487] dark:text-[#7a8296]">
+                        Take our 3-minute technical assessment to skip foundations you already know and get calendar milestone dates.
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => handleNavigate('quiz')}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg text-white bg-[#0A66C2] hover:bg-[#004182] transition-colors flex-shrink-0"
+                  >
+                    Take Assessment
+                    <ArrowRight className="h-3 w-3" strokeWidth={1.75} />
+                  </button>
+                </div>
+              ) : (
+                <div className="mb-6 p-3.5 rounded-xl bg-white dark:bg-[#12151e] border border-black/[0.08] dark:border-white/[0.08] flex items-center justify-between gap-3 shadow-sm">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-6 h-6 rounded-md bg-blue-500/10 text-[#0A66C2] flex items-center justify-center">
+                      <Sparkles className="h-3.5 w-3.5" />
+                    </div>
+                    <span className="text-xs font-medium text-[#111827] dark:text-[#eef0f5]">
+                      Your personalized roadmap is active.
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => handleNavigate('mypath')}
+                    className="inline-flex items-center gap-1 text-xs font-medium text-[#0A66C2] hover:underline"
+                  >
+                    View My Path
+                    <ArrowRight className="h-3 w-3" />
+                  </button>
+                </div>
+              )}
+
               {/* Optional "Continue where you left off" banner */}
               {lastVisitedField && (
                 <div className="mb-6 p-4 rounded-xl bg-white dark:bg-[#12151e] border border-[#0A66C2]/30 dark:border-[#0A66C2]/40 flex items-center justify-between gap-4">
@@ -351,7 +465,9 @@ const App = () => {
     <ThemeProvider>
       <AuthProvider>
         <ProgressProvider>
-          <AppContent />
+          <ProfileProvider>
+            <AppContent />
+          </ProfileProvider>
         </ProgressProvider>
       </AuthProvider>
     </ThemeProvider>
