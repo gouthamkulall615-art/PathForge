@@ -1,8 +1,11 @@
-import { useState, useRef, useMemo, useEffect, useCallback } from 'react'
+import { useState, useRef, useMemo, useEffect, useCallback, lazy, Suspense } from 'react'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { ThemeProvider } from './contexts/ThemeContext'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 import { ProgressProvider, useProgress } from './contexts/ProgressContext'
 import { ProfileProvider, useProfile } from './contexts/ProfileContext'
+
+const Landing = lazy(() => import('./pages/Landing'))
 import Navbar from './components/Navbar'
 import HeroSection from './components/HeroSection'
 import FieldCard from './components/FieldCard'
@@ -462,15 +465,33 @@ function AboutSection({ onBrowse }) {
 
 const App = () => {
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <ProgressProvider>
-          <ProfileProvider>
-            <AppContent />
-          </ProfileProvider>
-        </ProgressProvider>
-      </AuthProvider>
-    </ThemeProvider>
+    <BrowserRouter>
+      <ThemeProvider>
+        <AuthProvider>
+          <ProgressProvider>
+            <ProfileProvider>
+              <Routes>
+                <Route
+                  path="/"
+                  element={
+                    <Suspense fallback={
+                      <div className="min-h-screen bg-[#f5f7fa] dark:bg-[#0b0d14] flex items-center justify-center">
+                        <span className="font-mono text-xs text-[#6b7487] dark:text-[#7a8296]">Loading&hellip;</span>
+                      </div>
+                    }>
+                      <Landing />
+                    </Suspense>
+                  }
+                />
+                <Route path="/app" element={<AppContent />} />
+                {/* Catch-all: redirect to app */}
+                <Route path="*" element={<AppContent />} />
+              </Routes>
+            </ProfileProvider>
+          </ProgressProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </BrowserRouter>
   )
 }
 

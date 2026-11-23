@@ -73,3 +73,25 @@ html {
   animation: forgeSpark 0.5s ease-out;
 }
 
+
+/* ============================================================
+   Landing page additions — appended, do not edit above this
+   ============================================================ */
+
+/* Shiny text sweep animation */
+@keyframes shinySwipe {
+  from {
+    background-position: 200% center;
+  }
+  to {
+    background-position: -200% center;
+  }
+}
+
+/* Blueprint grid pattern class (used in FinalCTA inline too, kept for reuse) */
+.blueprint-grid {
+  background-image:
+    linear-gradient(rgba(10, 102, 194, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(10, 102, 194, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
