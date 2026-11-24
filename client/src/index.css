@@ -95,3 +95,44 @@ html {
     linear-gradient(90deg, rgba(10, 102, 194, 0.04) 1px, transparent 1px);
   background-size: 48px 48px;
 }
+
+/* ============================================================
+   Forge Tokens & SVG styles (from forge.css)
+   ============================================================ */
+:root {
+  --forge-canvas: #f5f7fa;
+  --forge-card: #ffffff;
+  --forge-raised: #eceff4;
+  --forge-ink: #0b0d14;
+  --forge-muted: #5b6475;
+  --forge-rail: rgba(11, 13, 20, 0.26);
+  --forge-cold: rgba(11, 13, 20, 0.34);
+  --forge-heat: #c77a12;
+  --forge-accent: #0a66c2;
+  --forge-on-accent: #ffffff;
+}
+.dark {
+  --forge-canvas: #0b0d14;
+  --forge-card: #11141c;
+  --forge-raised: #1a1e28;
+  --forge-ink: #e8ebf2;
+  --forge-muted: #8a93a6;
+  --forge-rail: rgba(255, 255, 255, 0.22);
+  --forge-cold: rgba(255, 255, 255, 0.32);
+  --forge-heat: #e0a03a;
+}
+
+/* SVG parts of the Forge map. GSAP tweens stroke/fill away from these starting values. */
+.f-hub-in, .f-node-in { transform-box: fill-box; transform-origin: center; }
+.f-trunk { fill: none; stroke: var(--forge-rail); stroke-width: 2; }
+.f-link  { fill: none; stroke: var(--forge-rail); stroke-width: 1.25; }
+.f-ember { fill: none; stroke: var(--forge-accent); stroke-width: 2; stroke-dasharray: 6 10; opacity: 0; }
+.f-hub   { fill: var(--forge-canvas); stroke: var(--forge-rail); stroke-width: 2; }
+.f-box   { fill: var(--forge-card); stroke: var(--forge-cold); stroke-width: 1.25; }
+.f-label { font: 500 11px 'JetBrains Mono', ui-monospace, monospace; fill: var(--forge-ink); }
+.f-hub-label {
+  font: 500 10px 'JetBrains Mono', ui-monospace, monospace; fill: var(--forge-muted);
+  paint-order: stroke; stroke: var(--forge-canvas); stroke-width: 4px; stroke-linejoin: round;
+}
+.f-check { fill: none; stroke: var(--forge-on-accent); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.f-spark { fill: none; stroke: var(--forge-accent); stroke-width: 1.5; opacity: 0; }

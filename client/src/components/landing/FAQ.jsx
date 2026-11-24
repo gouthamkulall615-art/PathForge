@@ -42,16 +42,19 @@ function FAQItem({ q, a }) {
   return (
     <div className="border-b border-black/[0.06] dark:border-white/[0.06] last:border-0">
       <button
+        type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
         aria-controls={`faq-${id}`}
-        className="w-full flex items-center justify-between gap-4 py-4 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#0A66C2] rounded group"
+        className="w-full flex items-center justify-between gap-4 py-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A66C2] rounded group"
       >
-        <span className="text-sm font-semibold text-[#111827] dark:text-[#eef0f5] group-hover:text-[#0A66C2] transition-colors">
+        <span className="text-sm font-semibold text-[var(--forge-ink)] group-hover:text-[var(--forge-accent)] transition-colors">
           {q}
         </span>
         <ChevronDown
-          className={`w-4 h-4 text-[#6b7487] dark:text-[#7a8296] flex-shrink-0 transition-transform duration-200 ${open ? 'rotate-180 text-[#0A66C2]' : ''}`}
+          className={`w-4 h-4 text-[var(--forge-muted)] shrink-0 transition-transform duration-200 ${
+            open ? 'rotate-180 text-[var(--forge-accent)]' : ''
+          }`}
           strokeWidth={1.75}
         />
       </button>
@@ -67,7 +70,7 @@ function FAQItem({ q, a }) {
             transition={{ duration: 0.22, ease: 'easeInOut' }}
             style={{ overflow: 'hidden' }}
           >
-            <p className="pb-4 text-xs sm:text-sm text-[#4b5565] dark:text-[#a3a9b8] leading-relaxed pr-6">
+            <p className="pb-4 text-xs sm:text-sm text-[var(--forge-muted)] leading-relaxed pr-6">
               {a}
             </p>
           </motion.div>
@@ -82,21 +85,21 @@ export default function FAQ() {
     <section
       id="faq"
       aria-labelledby="faq-heading"
-      className="py-20 px-4 sm:px-6 bg-[#f5f7fa] dark:bg-[#0b0d14] border-t border-black/[0.08] dark:border-white/[0.08]"
+      className="py-24 px-4 sm:px-6 bg-[var(--forge-canvas)] border-t border-black/[0.08] dark:border-white/[0.08]"
     >
       <div className="max-w-2xl mx-auto">
         <div className="mb-10 text-center">
-          <p className="font-mono text-xs text-[#0A66C2] uppercase tracking-widest mb-2 font-semibold">
-            Knowledge Base
+          <p className="font-mono text-xs text-[var(--forge-accent)] uppercase tracking-widest mb-2 font-semibold">
+            FAQ
           </p>
           <h2
             id="faq-heading"
-            className="text-2xl sm:text-3xl font-bold text-[#111827] dark:text-[#eef0f5] tracking-tight"
+            className="text-2xl sm:text-4xl font-bold text-[var(--forge-ink)] tracking-tight"
           >
             Frequently answered questions
           </h2>
         </div>
-        <div className="rounded-2xl border border-black/[0.08] dark:border-white/[0.08] bg-white dark:bg-[#11141c] divide-y divide-black/[0.06] dark:divide-white/[0.06] px-5 sm:px-7 shadow-sm">
+        <div className="rounded-2xl border border-black/[0.08] dark:border-white/[0.08] bg-[var(--forge-card)] divide-y divide-black/[0.06] dark:divide-white/[0.06] px-5 sm:px-7 shadow-sm">
           {FAQS.map((item) => (
             <FAQItem key={item.q} {...item} />
           ))}
